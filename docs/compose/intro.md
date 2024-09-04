@@ -27,11 +27,12 @@ networks:
 ```
 
 In the YAML file you can notice an inner structure:
-- the **services** keyword starts the service section containing all services. 
-- **db** is an example of the arbitraty application name, it must be any unique identifier.
-- inside each service, with the **image**, **volumes**, **ports** and **networks** keywords you can insert the same information used when you run a single container in the command line
-- the **volumes** keyword allows to define volumes to be attach in the containers. 
-- the **networks** keyword allows to define networks to be used in the containers. 
+
+* the **services** keyword starts the service section containing all services. 
+* **db** is an example of the arbitraty application name, it must be any unique identifier.
+* inside each service, with the **image**, **volumes**, **ports** and **networks** keywords you can insert the same information used when you run a single container in the command line
+* the **volumes** keyword allows to define volumes to be attach in the containers. 
+* the **networks** keyword allows to define networks to be used in the containers. 
 
 ### Docker compose command to control the application status
 
