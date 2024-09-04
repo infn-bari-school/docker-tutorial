@@ -413,7 +413,7 @@ When multiple approches are used, Docker compose prioritizes configuration as fo
 5. Undefined variables (lowest important)
 
 #### Health checks
-As in the command line instructor, also in the Docker compose file can be defined a health check for a given service, as showed following:
+Similar to the command-line interface, you can specify health checks for services within a Docker Compose file, as demonstrated below.
 
 ```bash
 docker volume create influxdb-storage
@@ -433,7 +433,7 @@ docker container run --name influxdb
 	       influxdb:2.1
 ```
 
-And the corresponding Docker compose file:
+Docker compose file:
 
 ```yaml
 version: '3.8'
@@ -458,11 +458,11 @@ services:
 
 ### Dependencies
 
-Some applications need a dependency chain between services, so that some services get loaded before (and unloaded after) other ones.
+Applications often have dependencies between services, requiring some to start before others. 
 
-The dependencies chain can be defined inside the Docker Compose file by using the `depends_on` keyword. 
+Docker Compose uses the `depends_on` keyword to define these dependencies. 
 
-Considering the above example, we would like to start the grafana service after the influxdb service. 
+For instance, we can configure Grafana to start only after InfluxDB is running.
 
 The Docker Compose file becomes:
 
@@ -499,7 +499,7 @@ volumes:
 
 #### Waiting for a service is ready
 
-Some applications might need to wait for a tool is “ready”, not just running. Health checks help to identify the "ready" status. 
+Certain applications require tools to be fully functional, not just running. Health checks can determine when a tool is ready for use.
 
 The Docker compose file becomes:
 
@@ -533,11 +533,11 @@ services:
 
 ### Profiles
 
-Profiles allow adjusting the Compose application model for various usages and environments by selectively enabling services. 
+Profiles in Docker Compose offer a way to tailor your application for different scenarios by selectively activating or deactivating services. 
 
-This is achieved by assigning each service to zero or more profiles. 
+You can assign services to zero or more profiles. 
 
-If unassigned, the service is always started but if assigned, it is only started if the profile is activated.
+Unassigned services always start, while assigned ones start only when their corresponding profile is active.
 
 Let's considering the following Docker compose file
 
@@ -581,11 +581,14 @@ COMPOSE_PROFILES=frontend,debug docker compose up     # Other syntax for the abo
 
 ### Build Dockerfile and run a multi-container application
 
-Images are defined in the `image` section on each service. Docker Compose allows to use for a service a custom image (described with a Dockerfile) that is built in run-time. 
 
-For those services the `image` keyword should be replaced with the `build` keyword. 
+Within the image section of each service, Docker Compose defines the image used. 
 
-Following an example of an application composed of a single service whom image is build in run-time. The custom image consist of a `python:3` official image with additional python modules installed.
+You can specify a custom image built at runtime using a Dockerfile. 
+
+Replace the `image` keyword with `build` for such services. 
+
+Here's an example of a single-service application using a custom `python:3` image with additional modules.
 
 Folder content:
 
