@@ -1,7 +1,7 @@
 
 Docker compose is a tool for defining and running multi-container Docker application.
 
-### Docker compose file qweqwe
+### Docker compose file
 
 Docker uses a YAML format file to define the multi-container application, also known as docker compose file.
 
