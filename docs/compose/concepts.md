@@ -126,7 +126,7 @@ d6f329122060   none  	null  	local
 Some comments:
 - Volumes are not removed with `docker compose down`
 - Compose preserves all volumes used by your services
-- Data inside volume is not lost and can be reused once the app is restarted
+- Data inside volume is not lost and can be reused once the application is restarted
 - To remove volume as well, use `docker compose down --volumes` or `docker compose down -v`
 
 ### Project name
@@ -136,7 +136,7 @@ Compose uses project names to isolate multi-container applications from each oth
 If not set, the folder name is taken as project name.
 
 !!! tip
-    A custom project name can be set using the `-p` command line option or the `COMPOSE_PROJECT_NAME` env var.
+    A custom project name can be set using the `-p` command line option or the `COMPOSE_PROJECT_NAME` environment variable.
 
 ```bash
 user@vm:~$ cd ..
@@ -161,13 +161,13 @@ user@vm:~/prova_2$ docker compose down
 
 ### Network
 
-By default Compose sets up a single network for your app.
+By default Compose sets up a single network for your application.
 
-Each container joins the default network and is both reachable by other containers on that network and discoverable by them at a hostname identical to the container name.
+Each container joins the default network and is both **reachable** by other containers on that network and **discoverable** by them at a hostname identical to the container name.
 
-If you make a conﬁguration change to a service and run `docker compose up` to update it, the old container is removed and the new one joins the network under a different IP address but the same name. So it is suggested to use container names as hostname instead of IP to connect services.
+If you make a conﬁguration change to a service and run `docker compose up` to update it, the old container is removed and the new one joins the network under a different IP address but the same name. So it is suggested to use hostnames instead of IPs to connect services.
 
-You can specify your own network with the top-level networks key. Following an example.
+You can specify your custom network with the top-level networks key. Following an example.
 
 ```yaml
 networks:
@@ -186,7 +186,7 @@ networks:
 
 ### Write your first docker compose file
 
-A simple approach to learn how to write a docker compose file is to convert some command line instructions to the corresponding YAML format file, that are well managed from Docker Compose. 
+Let's learn how to write a docker compose file by converting an application described from command line instructions to the corresponding YAML format file.
 
 ```bash
 docker volume create influxdb-storage
@@ -223,11 +223,11 @@ services:
     networks:
       - my_net
     volumes:
-  	  - influxdb-storage:/var/lib/influxdb
+      - influxdb-storage:/var/lib/influxdb
     environment:
-  	  - INFLUXDB_DB=db0
-  	  - INFLUXDB_ADMIN_USER=admin
-  	  - INFLUXDB_ADMIN_PASSWORD=admin
+      - INFLUXDB_DB=db0
+      - INFLUXDB_ADMIN_USER=admin
+      - INFLUXDB_ADMIN_PASSWORD=admin
 
   grafana:
     image: grafana/grafana:8.3.4-ubuntu
@@ -236,10 +236,10 @@ services:
     networks:
       - my_net
     volumes:
-  	  - grafana-storage:/var/lib/grafana
+      - grafana-storage:/var/lib/grafana
     environment:
-  	  - GF_SECURITY_ADMIN_USER=admin
-  	  - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
 
 volumes:
   influxdb-storage: {}
@@ -328,7 +328,7 @@ export GRAFANA_PW=admin
 docker compose up 
 ```
 
-Or write a further file containing all environment variables and this file must be named `.env`. 
+Or write a further file containing all environment variables. This file must be named `.env`. 
 
 ```bash
 user@vm:~/example$ cat .env
@@ -340,9 +340,9 @@ GRAFANA_PW=admin
 
 Docker checks if in the directory is present a `.env` file. In a such a case, it will import the environment variables when the multi-container application is started.
 
-A third approach is to define an environment variable file per service and then insert the file name inside the description of the service in the Docker Compose file.
+A third approach involves defining an environment variable file per service and inserting its name within the service definition, as show below.
 
-Following the files' content:
+Environment variable files' content:
 
 ```bash
 user@vm:~/example$ cat influxdb.env
@@ -355,7 +355,7 @@ GRAFANA_USERNAME=admin
 GRAFANA_PW=admin
 ```
 
-And how the YAML file changes:
+Docker compose file:
 
 ```yaml
 version: '3.8'
@@ -383,9 +383,9 @@ volumes:
   grafana-storage: {}
 ```
 
-Further comments on Environment variables in Docker compose. 
+##### Further comments
 
-Environment variables can be used to customize your application, e.g. to define the image version of an service:
+Environment variables offer a flexible way to customize your application. For example, you can use them to specify the image version of a service:
 
 ```yaml
 service:
@@ -401,14 +401,16 @@ service:
     image: influxdb:{$INFLUX_VERSION:-2.1}
 ```
 
-The default value should be inserted after the `:-` characters.
+The default value should be placed after the `:-` characters.
 
 Since more approaches are supported, Docker compose uses the following priority order, overwriting the less important with the higher ones:
+
+When multiple approches are used, Docker compose prioritizes configuration as follows, with high-priorit values overriding lower-priority ones:
 1. Compose ﬁle (highest important)
 2. Shell environment variables
 3. Environment ﬁle
 4. Dockerﬁle
-5. Variable not deﬁned (lowest important)
+5. Undefined variables (lowest important)
 
 #### Health checks
 As in the command line instructor, also in the Docker compose file can be defined a health check for a given service, as showed following:
