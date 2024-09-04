@@ -588,7 +588,7 @@ You can specify a custom image built at runtime using a Dockerfile.
 
 Replace the `image` keyword with `build` for such services. 
 
-Here's an example of a single-service application using a custom `python:3` image with additional modules.
+Here's an example of a single-service application using a custom `python:3` image.
 
 Folder content:
 
