@@ -1,4 +1,4 @@
-We will install docker engine on our Ubuntu Jammy 22.04 (LTS) Virtual Machine using the repository.
+We will install docker engine on our Ubuntu Noble 24.04 (LTS) Virtual Machine using the repository.
 
 !!! info
     Full instructions are available at [https://docs.docker.com/engine/install/](https://docs.docker.com/engine/install/)
@@ -61,7 +61,7 @@ sudo usermod -aG docker $USER
     ```
 === "Example output"
     ```
-    Docker version 24.0.5, build ced0996
+    Docker version 27.2.0, build 3ab4256    
     ```
 
 

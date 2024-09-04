@@ -169,7 +169,7 @@ The container is flagged as unhealthy after three failures of the check (you can
      -e MYSQL_USER=${MYSQL_USER} \
      -e MYSQL_PASSWORD=${MYSQL_PASSWORD} \
      -e MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD} \
-     --health-cmd='mysqladmin -p${MYSQL_ROOT_PASSWORD} ping -h localhost' \
+     --health-cmd='mariadb-admin -p${MYSQL_ROOT_PASSWORD} ping -h localhost' \
      --health-interval=20s \
      --health-retries=3 \
      mariadb:latest

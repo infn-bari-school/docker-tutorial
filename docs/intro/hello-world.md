@@ -9,8 +9,8 @@ Look at the output:
 ```bash
 Unable to find image 'hello-world:latest' locally
 latest: Pulling from library/hello-world
-719385e32844: Pull complete
-Digest: sha256:dcba6daec718f547568c562956fa47e1b03673dd010fe6ee58ca806767031d1c
+c1ec31eb5944: Pull complete
+Digest: sha256:53cc4d415d839c98be39331c948609b659ed725170ad2ca8eb36951288f81b75
 Status: Downloaded newer image for hello-world:latest
 
 Hello from Docker!
