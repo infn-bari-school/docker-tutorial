@@ -1,5 +1,5 @@
 
-Docker compose is a tool for defining and running multi-container Docker applications.
+**DOCKER COMPOSE** is a utility designed to define and execute multi-container Docker applications. It facilitates the management of interconnected containers as a unified entity
 
 ### Docker compose file
 
