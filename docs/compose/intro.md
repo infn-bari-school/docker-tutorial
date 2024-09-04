@@ -5,10 +5,9 @@ Docker compose is a tool for defining and running multi-container Docker applica
 
 Docker uses a YAML format file to define the multi-container application, also known as "docker compose file".
 
-Following a simple example of a YAML file:
+Following a simple example of a docker compose file:
 
 ```yaml
-version: "3.8"
 services:
   db:
     image: influxdb:2.1
