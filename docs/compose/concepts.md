@@ -1,9 +1,11 @@
 
-Docker compose is a tool for defining and running multi-container Docker application.
+Docker compose is a tool for defining and running multi-container Docker applications.
 
-### Docker compose file 123
+### Docker compose file
 
-Docker uses a YAML format file to define the multi-container application, also known as "docker compose file".
+Docker uses a simple YAML file to describe multi-container application.
+
+This file is called a "docker-compose file"
 
 Following a simple example of a docker compose file:
 
@@ -25,11 +27,11 @@ networks:
   db_net:
 ```
 
-In the YAML file you can notice an inner structure:
+In the YAML file you can notice an basic structure:
 
-* the **services** keyword starts the section containing all services. 
-* **db** is an arbitraty service name, it must be any unique identifier.
-* inside each service, with the **image**, **volumes**, **ports** and **networks** keywords you can insert the same information used when you run a single container in the command line
+* the **services** keyword let you list all services of the application.
+* **db** is the arbitraty name of the service,  it can be anything you like as long as it's unique.
+* inside each service, with the **image**, **volumes**, **ports** and **networks** keywords you can configure the execution of the service
 * the **volumes** keyword allows to define volumes to be attach in the containers. 
 * the **networks** keyword allows to define networks to be used in the containers. 
 
@@ -45,7 +47,7 @@ With a single command, it is possible to create, start, stop and destroy all ser
 
 #### Start your first multi-container application
 
-Let's start a multi-container application. At this point it's not important the content of the docker compose file but that the docker-compose.yaml is inside the `prova_1` folder. 
+Let's start a multi-container application. At this point it's not important the content of the docker compose file.
 
 Docker compose file:
 
