@@ -1,0 +1,122 @@
+
+### Exercise 1
+
+Write the docker-compose.yml file for the following Docker CLI inserting the `depends_on` condition on db health check
+
+=== "Exercise details"
+    ```bash
+    docker network create wordpress_net
+    docker volume create db_data
+    docker volume create wp_data
+    docker container run --name db \
+    --network wordpress_net \
+    -v db_data:/var/lib/mysql \
+    -e MYSQL_ROOT_PASSWORD=somewordpress \
+    -e MYSQL_USER=wordpress-user \
+    -e MYSQL_PASSWORD=wordpress-password \
+    -e MYSQL_DATABASE=wordpress-db \
+    --restart always \
+    --health-cmd="mysqladmin ping --silent" \
+    --health-interval=10s \
+    --health-start-period=10s \
+    --health-timeout=10s \
+    --health-retries=60 \
+    --restart always \
+    -d \
+    mariadb:10.6.4-focal
+
+    docker run --name wp \
+    --network wordpress_net \
+    -v wp_data:/var/www/html
+    -p 8080:80 \
+    -e WORDPRESS_DB_HOST=db \
+    -e WORDPRESS_DB_USER=wordpress-user \
+    -e WORDPRESS_DB_PASSWORD=wordpress-password \
+    -e WORDPRESS_DB_NAME=wordpress-database \
+    -d \
+    wordpress
+    ```
+=== "Solution"
+    ```yaml
+    version: '3.8'
+    services:
+      db:
+        image: mariadb:10.6.4-focal
+        volumes:
+          - db_data:/var/lib/mysql
+        networks:
+          - wp_net
+        restart: always
+        environment:
+          - MYSQL_ROOT_PASSWORD=somewordpress
+          - MYSQL_DATABASE=wordpress-database
+          - MYSQL_USER=wordpress-user
+          - MYSQL_PASSWORD=wordpress-password
+        healthcheck:
+        test: ["CMD", "mysqladmin", "ping", "--silent"]
+        interval: 10s
+        timeout: 10s
+        retries: 60
+        start_period: 10s
+    
+      wordpress:
+        image: wordpress:latest
+        volumes:
+          - wp_data:/var/www/html
+        ports:
+          - 8081:80
+        restart: always
+        environment:
+          - WORDPRESS_DB_HOST=db
+          - WORDPRESS_DB_USER=wordpress-user
+          - WORDPRESS_DB_PASSWORD=wordpress-password
+          - WORDPRESS_DB_NAME=wordpress-database
+        depends_on:
+          db:
+            condition: service_healthy
+
+    volumes:
+      db_data:
+      wp_data:
+    ```
+
+### Exercise 2
+
+Write the docker-compose.yml file that builds the following Dockerfile and uses it
+
+=== "Exercise details"
+    ```
+    base-image: jupyter/minimal-notebook
+    python module to install: pandas, numpy
+    expose port: 8888
+    command: /opt/conda/bin/python3.11 /opt/conda/bin/jupyter-lab \
+                --no-browser \
+                --allow-root \
+                --NotebookApp.token='' \
+                --NotebookApp.password=''
+    ```
+=== "Solution"
+    ```bash
+    cat requirements.txt
+    pandas
+    numpy
+
+    cat Dockerfile
+    FROM jupyter/minimal-notebook
+    COPY requirements.txt /requirements.txt
+    RUN pip install -r /requirements.txt
+
+    cat docker-compose.yaml
+    version: '3.8'
+    services:
+      my_jupyter:
+        build: .
+        ports:
+          - 8888:8888
+        command: 
+          - /opt/conda/bin/python3.11
+          - /opt/conda/bin/jupyter-lab 
+          - --no-browser --allow-root
+          - --NotebookApp.token=''
+          - --NotebookApp.password=''
+    ```
