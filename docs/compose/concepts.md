@@ -45,7 +45,7 @@ With a single command, it is possible to create, start, stop and destroy all ser
 
 #### Start your first multi-container application
 
-Let's start a multi-container application. At this point it's not important the content of the docker compose file.
+Let's start a multi-container application. At this point it's not important the content of the docker compose file but that the docker-compose.yaml is inside the `prova_1` folder. 
 
 Docker compose file:
 
