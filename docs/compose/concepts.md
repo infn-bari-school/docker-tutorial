@@ -646,9 +646,14 @@ services:
 ```
 
 Let's start the application:
+
+!!! tip
+    - using the  `--build` option forces Docker to rebuild the image
+
+
 === "Command"
     ```bash
-    docker compose up -d -–build
+    docker compose up -d --build 
     ```
 === "Output"
     ```bash
