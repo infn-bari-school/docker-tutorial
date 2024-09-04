@@ -619,7 +619,7 @@ pandas
 numpy
 ```
 
-my-script file content:
+my-script file content: 
 
 ```python
 import socket
@@ -645,7 +645,7 @@ services:
       - dir_data:/data
 ```
 
-Let's start the application:
+#### Let's start the application:
 
 !!! tip
     - using the  `--build` option forces Docker to rebuild the image
