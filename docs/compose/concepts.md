@@ -653,7 +653,7 @@ Let's start the application:
 
 === "Command"
     ```bash
-    docker compose up -d --build 
+    docker compose up -d --build
     ```
 === "Output"
     ```bash
