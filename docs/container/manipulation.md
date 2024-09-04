@@ -8,10 +8,10 @@ Let's see what happens:
 ```bash
 Unable to find image 'ubuntu:latest' locally
 latest: Pulling from library/ubuntu
-445a6a12be2b: Pull complete
-Digest: sha256:aabed3296a3d45cede1dc866a24476c4d7e093aa806263c27ddaadbdce3c1054
+31e907dcc94a: Pull complete
+Digest: sha256:8a37d68f4f73ebf3d4efafbcf66379bf3728902a8038616808f04e34a9ab63ee
 Status: Downloaded newer image for ubuntu:latest
-root@2c8a2962ca5c:/#
+root@0e539c9ccee4:/#
 ```
 
 We are inside the docker container!
@@ -26,8 +26,8 @@ We are inside the docker container!
 This is a fully fledged Ubuntu host, and we can do anything we like in it. Let's explore it a bit, starting with asking for its hostname:
 
 ```bash
-root@2c8a2962ca5c:/# hostname
-2c8a2962ca5c
+root@0e539c9ccee4:/# hostname
+0e539c9ccee4
 ```
 
 !!! tip
@@ -35,22 +35,24 @@ root@2c8a2962ca5c:/# hostname
 
 Let's have a look at the `/etc/hosts` file too.
 ```bash
-root@2c8a2962ca5c:/# cat /etc/hosts
+root@0e539c9ccee4:/# cat /etc/hosts
 127.0.0.1	localhost
 ::1	localhost ip6-localhost ip6-loopback
 fe00::0	ip6-localnet
 ff00::0	ip6-mcastprefix
 ff02::1	ip6-allnodes
 ff02::2	ip6-allrouters
-172.17.0.2	2c8a2962ca5c
+172.17.0.2	0e539c9ccee4
 ```
 Docker has also added a host entry for our container with its IP address. Let's also check out its networking configuration.
 
 ```bash
-root@2c8a2962ca5c:/# ip a
+root@0e539c9ccee4:/# ip a
 1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
     link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
     inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host
        valid_lft forever preferred_lft forever
 6: eth0@if7: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default
     link/ether 02:42:ac:11:00:02 brd ff:ff:ff:ff:ff:ff link-netnsid 0
@@ -68,10 +70,10 @@ As we can see, we have the `lo` loopback interface and the `eth0@if7` network in
 We can also check its running processes:
 
 ```bash
-root@2c8a2962ca5c:/# ps aux
+root@0e539c9ccee4:/# ps aux
 USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
-root           1  0.0  0.0   4624  3780 pts/0    Ss   07:43   0:00 bash
-root         352  0.0  0.0   7060  1568 pts/0    R+   07:53   0:00 ps aux
+root           1  0.0  0.0   4588  3968 pts/0    Ss   11:04   0:00 bash
+root         334  0.0  0.1   7888  4224 pts/0    R+   11:08   0:00 ps aux
 ```
 
 Note that the process `bash` has PID 1. 
@@ -83,15 +85,15 @@ So the container still exists but it's stopped:
 ```bash
 docker container ps -a
 CONTAINER ID   IMAGE         COMMAND    CREATED          STATUS                      PORTS     NAMES
-2c8a2962ca5c   ubuntu        "bash"     11 minutes ago   Exited (0) 13 seconds ago             magical_sanderson
-3a3eb75d3da3   hello-world   "/hello"   22 minutes ago   Exited (0) 22 minutes ago             sharp_kepler
+0e539c9ccee4   ubuntu        "bash"     5 minutes ago    Exited (0) 15 seconds ago             frosty_satoshi
+a621c49ed3d6   hello-world   "/hello"   15 minutes ago   Exited (0) 15 minutes ago             bold_galileo
 ```
 ### Starting a stopped container
 We can start again our stopped container with `docker container start <container-id or container-name>`:
 
 ```bash
-docker container start 2c8a2962ca5c
-2c8a2962ca5c
+docker container start 0e539c9ccee4
+0e539c9ccee4
 ```
 Our container will restart with the same options we had specified when we launched it with the `docker run` command.
 
@@ -108,8 +110,8 @@ This is useful when you want to see what is written in the standard output in re
 
 So running the `attach` command on our Ubuntu container will bring us back to our bash prompt:
 ```bash
-docker container attach 2c8a2962ca5c
-root@2c8a2962ca5c:/#
+docker attach 0e539c9ccee4
+root@0e539c9ccee4:/#
 ```
 
 You can detach from a container and leave it running using the `CTRL-p CTRL-q` key sequence.
@@ -124,16 +126,16 @@ The command can be run in background using the option `-d` or interactively usin
 Try the following command on your Ubuntu container:
 
 ```bash 
-docker exec -it 2c8a2962ca5c bash
-root@2c8a2962ca5c:/#
+docker exec -it 0e539c9ccee4 bash
+root@0e539c9ccee4:/#
 ```
 Let's look at the processes inside the container:
 ```bash
-root@2c8a2962ca5c:/# ps aux
+root@0e539c9ccee4:/# ps aux
 USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
-root           1  0.0  0.0   4624  3844 pts/0    Ss+  07:55   0:00 bash
-root           9  0.0  0.0   4624  3788 pts/1    Ss   07:59   0:00 bash
-root          17  0.0  0.0   7060  1572 pts/1    R+   07:59   0:00 ps aux
+root           1  0.0  0.0   4588  3712 pts/0    Ss+  13:56   0:00 bash
+root           9  0.1  0.0   4588  3968 pts/1    Ss   13:57   0:00 bash
+root          17  0.0  0.1   7888  4096 pts/1    R+   13:57   0:00 ps aux
 ```
 We can see that the `exec` command started a new shell session. 
 

@@ -3,20 +3,18 @@ The storage location of Docker images and containers depends on the operating sy
 On Ubuntu, Docker stores images and containers files under `/var/lib/docker`:
 
 ```bash
-total 52
-drwxr-xr-x 39 root root 4096 Sep  4 07:24 ..
-drwx------  2 root root 4096 Sep  4 07:24 runtimes
-drwx-----x  2 root root 4096 Sep  4 07:24 volumes
-drwx------  4 root root 4096 Sep  4 07:24 plugins
--rw-------  1 root root   36 Sep  4 07:24 engine-id
-drwx------  3 root root 4096 Sep  4 07:24 image
-drwxr-x---  3 root root 4096 Sep  4 07:24 network
-drwx------  2 root root 4096 Sep  4 07:24 swarm
-drwx--x--- 12 root root 4096 Sep  4 07:24 .
-drwx--x--x  4 root root 4096 Sep  4 07:24 buildkit
-drwx------  2 root root 4096 Sep  4 07:31 tmp
-drwx--x---  6 root root 4096 Sep  4 07:31 overlay2
-drwx--x---  3 root root 4096 Sep  4 07:31 containers
+total 44
+drwx--x--x 4 root root 4096 Sep  4 10:46 buildkit
+drwx--x--- 3 root root 4096 Sep  4 10:53 containers
+-rw------- 1 root root   36 Sep  4 10:46 engine-id
+drwx------ 3 root root 4096 Sep  4 10:46 image
+drwxr-x--- 3 root root 4096 Sep  4 10:46 network
+drwx--x--- 6 root root 4096 Sep  4 10:53 overlay2
+drwx------ 4 root root 4096 Sep  4 10:46 plugins
+drwx------ 2 root root 4096 Sep  4 10:46 runtimes
+drwx------ 2 root root 4096 Sep  4 10:46 swarm
+drwx------ 2 root root 4096 Sep  4 10:53 tmp
+drwx-----x 2 root root 4096 Sep  4 10:46 volumes
 ```
 
 Docker images are stored in `/var/lib/docker/overlay2`.
@@ -35,16 +33,16 @@ docker image inspect hello-world
 ```bash
 [
     {
-        "Id": "sha256:9c7a54a9a43cca047013b82af109fe963fde787f63f9e016fdc3384500c2823d",
+        "Id": "sha256:d2c94e258dcb3c5ac2798d32e1249e42ef01cba4841c2234249495f87264ac5a",
         "RepoTags": [
             "hello-world:latest"
         ],
 ....
         "GraphDriver": {
             "Data": {
-                "MergedDir": "/var/lib/docker/overlay2/04635df94f3219c431d9dfba92f4456f5e0247b3dcc0b94f55d331d4c3ced400/merged",
-                "UpperDir": "/var/lib/docker/overlay2/04635df94f3219c431d9dfba92f4456f5e0247b3dcc0b94f55d331d4c3ced400/diff",
-                "WorkDir": "/var/lib/docker/overlay2/04635df94f3219c431d9dfba92f4456f5e0247b3dcc0b94f55d331d4c3ced400/work"
+                "MergedDir": "/var/lib/docker/overlay2/7fea1105b18fd2b9fb8237cd6ff7bf2e2ba1521012006625ef2b1542e9b5f285/merged",
+                "UpperDir": "/var/lib/docker/overlay2/7fea1105b18fd2b9fb8237cd6ff7bf2e2ba1521012006625ef2b1542e9b5f285/diff",
+                "WorkDir": "/var/lib/docker/overlay2/7fea1105b18fd2b9fb8237cd6ff7bf2e2ba1521012006625ef2b1542e9b5f285/work"
             },
             "Name": "overlay2"
         },
@@ -62,11 +60,11 @@ The `hello-world` image therefore contains just one layer that adds the `hello` 
 Look at the content of the **UpperDir**:
 
 ```bash
-sudo ls -latr /var/lib/docker/overlay2/04635df94f3219c431d9dfba92f4456f5e0247b3dcc0b94f55d331d4c3ced400/diff 
+sudo ls -latr /var/lib/docker/overlay2/7fea1105b18fd2b9fb8237cd6ff7bf2e2ba1521012006625ef2b1542e9b5f285/diff 
 total 24
--rwxrwxr-x 1 root root 13256 May  4 17:36 hello
-drwxr-xr-x 2 root root  4096 Sep  4 07:31 .
-drwx--x--- 3 root root  4096 Sep  4 07:31 ..
+-rwxr-xr-x 1 root root 13256 Dec 15  2023 hello
+drwxr-xr-x 2 root root  4096 Sep  4 10:53 .
+drwx--x--- 3 root root  4096 Sep  4 10:53 ..
 ``` 
 
 Another interesting command is `docker history` that shows the hystory of an image. Try it!
@@ -77,9 +75,9 @@ docker history hello-world
 
 Output:
 ```bash
-IMAGE          CREATED        CREATED BY                                      SIZE      COMMENT
-9c7a54a9a43c   4 months ago   /bin/sh -c #(nop)  CMD ["/hello"]               0B
-<missing>      4 months ago   /bin/sh -c #(nop) COPY file:201f8f1849e89d53…   13.3kB
+IMAGE          CREATED         CREATED BY                SIZE      COMMENT
+d2c94e258dcb   16 months ago   CMD ["/hello"]            0B        buildkit.dockerfile.v0
+<missing>      16 months ago   COPY hello / # buildkit   13.3kB    buildkit.dockerfile.v0
 ```
 
 Again, you can see here that the image has only one layer (0B lines are neglected).
