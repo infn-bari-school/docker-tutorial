@@ -67,8 +67,8 @@ nav:
     - Use your own runner from a dedicated VM: 'image/automation/runner.md'
     - Exercises: 'image/automation/exercises.md'
   - Multi-container applications with Docker Compose:
-    - Docker compose: 'compose/intro.md'
+    - Concepts: 'compose/concepts.md'
     - Exercise: 'compose/exercise.md'
 
  
-copyright: Copyright &copy; 2022 INFN
+copyright: Copyright &copy; 2024 INFN
