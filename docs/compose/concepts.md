@@ -1,5 +1,5 @@
 
-**DOCKER COMPOSE** is a utility designed to define and execute multi-container Docker applications. It facilitates the management of interconnected containers as a unified entity
+**Docker Compose** is a utility designed to define and execute multi-container Docker applications. It facilitates the management of interconnected containers as a unified entity
 
 ### Docker compose file
 
@@ -12,7 +12,7 @@ Following a simple example of a docker compose file:
 ```yaml
 services:
   db:
-    image: influxdb:2.1
+    image: influxdb:2.7
     volumes:
     - db_data:/var/lib/influxdb2:rw
     ports:
@@ -45,6 +45,12 @@ With a single command, it is possible to create, start, stop and destroy all ser
 * **docker compose stop**: stops the application environment
 * **docker compose down**: stops and destroys the application environment
 
+#### Most used docker compose commands
+* `docker compose up`: initializes, starts the application environment and shows logs without return to command line
+* `docker compose up -d`: initializes and starts the application environment in detacted mode
+* `docker compose ps`: lists the running containers/services
+* `docker compose down -v`: stops and destroys the application environment and volumes
+
 #### Start your first multi-container application
 
 Let's start a multi-container application. At this point it's not important the content of the docker compose file.
@@ -52,10 +58,9 @@ Let's start a multi-container application. At this point it's not important the 
 Docker compose file:
 
 ```yaml
-version: "3.8"
 services:
   db:
-    image: influxdb:2.1
+    image: influxdb:2.7
     volumes:
     - db_data:/var/lib/influxdb2:rw
     ports:
@@ -82,7 +87,7 @@ user@vm:~/prova_1$ docker compose up -d
 
 user@vm:~/prova_1$ docker container ps
 CONTAINERID   IMAGE      	 NAMES
-Be72e5..      influxdb:2.1     prova_1_db_1
+Be72e5..      influxdb:2.7     prova_1_db_1
 
 user@vm:~/prova_1$ docker volume ls
 DRIVER	VOLUME NAME
@@ -153,7 +158,7 @@ user@vm:~/prova_2$ docker compose up -d
 
 user@vm:~/prova_2$ docker ps
 CONTAINERID     IMAGE           NAMES
-297f44..        influxdb:2.1    prova_2_db_1
+297f44..        influxdb:2.7    prova_2_db_1
 
 user@vm:~/prova_2$ docker compose down
 [+] Running 2/2
@@ -192,34 +197,35 @@ Let's learn how to write a docker compose file by converting an application desc
 
 ```bash
 docker volume create influxdb-storage
-export INFLUXDB_USERNAME=admin
-export INFLUXDB_PW=admin
-docker container run --name influxdb
+export INFLUXDB_USERNAME=corsodocker2024
+export INFLUXDB_PW=corsodocker2024
+docker container run --name influxdb \
   -p 8086:8086 \
   -v influxdb-storage:/var/lib/influxdb \
-  -e INFLUXDB_DB=db0 \
-  -e INFLUXDB_ADMIN_USER=${INFLUXDB_USERNAME} \
-  -e INFLUXDB_ADMIN_PASSWORD=${INFLUXDB_PW} \
-  influxdb:2.1
+  -e DOCKER_INFLUXDB_INIT_MODE=setup \
+  -e DOCKER_INFLUXDB_INIT_USERNAME=${INFLUXDB_USERNAME} \
+  -e DOCKER_INFLUXDB_INIT_PASSWORD=${INFLUXDB_PW} \
+  -e DOCKER_INFLUXDB_INIT_ORG=INFN \
+  -e DOCKER_INFLUXDB_INIT_BUCKET=INFN-BUCKET \
+  influxdb:2.7
 
 docker volume create grafana-storage
-export GRAFANA_USERNAME=admin
-export GRAFANA_PW=admin
-docker container run --name grafana
+export GRAFANA_USERNAME=corsodocker2024
+export GRAFANA_PW=corsodocker2024
+docker container run --name grafana \
   -p 3000:3000 \
   -v grafana-storage:/var/lib/grafana \
   -e GF_SECURITY_ADMIN_USER=${GRAFANA_USERNAME} \
   -e GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PW} \
-  grafana/grafana:8.3.4-ubuntu
+  grafana/grafana:9.5.21-ubuntu
 ```
 
 The resulting YAML file is:
 
 ```yaml
-version: '3.8'
 services:
   influxdb:
-    image: influxdb:2.1
+    image: influxdb:2.7
     ports:
       - '8086:8086'
     networks:
@@ -227,12 +233,14 @@ services:
     volumes:
       - influxdb-storage:/var/lib/influxdb
     environment:
-      - INFLUXDB_DB=db0
-      - INFLUXDB_ADMIN_USER=admin
-      - INFLUXDB_ADMIN_PASSWORD=admin
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=${INFLUXDB_USERNAME}
+      - DOCKER_INFLUXDB_INIT_PASSWORD=${INFLUXDB_PW}
+      - DOCKER_INFLUXDB_INIT_ORG=INFN
+      - DOCKER_INFLUXDB_INIT_BUCKET=INFN-BUCKET
 
   grafana:
-    image: grafana/grafana:8.3.4-ubuntu
+    image: grafana/grafana:9.5.21-ubuntu
     ports:
       - '3000:3000'
     networks:
@@ -240,8 +248,8 @@ services:
     volumes:
       - grafana-storage:/var/lib/grafana
     environment:
-      - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_USERNAME}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PW} 
 
 volumes:
   influxdb-storage: {}
@@ -258,28 +266,28 @@ As you can see, there is a one-to-one correspondence between information in the 
 Docker Compose creates a default network if not present any network definitions in the docker compose file. In such a case, the section `networks` inside each application should be avoided as well. In this second scenario, the YAML file become: 
 
 ```yaml
-version: '3.8'
 services:
   influxdb:
-    image: influxdb:2.1
+    image: influxdb:2.7
     ports:
       - '8086:8086'
     volumes:
   	  - influxdb-storage:/var/lib/influxdb
     environment:
-  	  - INFLUXDB_DB=db0
-  	  - INFLUXDB_ADMIN_USER=admin
-  	  - INFLUXDB_ADMIN_PASSWORD=admin
-
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=${INFLUXDB_USERNAME}
+      - DOCKER_INFLUXDB_INIT_PASSWORD=${INFLUXDB_PW}
+      - DOCKER_INFLUXDB_INIT_ORG=INFN
+      - DOCKER_INFLUXDB_INIT_BUCKET=INFN-BUCKET
   grafana:
-    image: grafana/grafana:8.3.4-ubuntu
+    image: grafana/grafana:9.5.21-ubuntu
     ports:
       - '3000:3000'
     volumes:
   	  - grafana-storage:/var/lib/grafana
     environment:
-  	  - GF_SECURITY_ADMIN_USER=admin
-  	  - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_USERNAME}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PW} 
 
 volumes:
   influxdb-storage: {}
@@ -292,21 +300,22 @@ As you can see from the docker compose file above, the environment variable valu
 A second approach allows to link existed environment variables by inserting their names inside the docker compose file.
 
 ```yaml
-version: '3.8'
 services:
   influxdb:
-    image: influxdb:2.1
+    image: influxdb:2.7
     ports:
       - '8086:8086'
     volumes:
   	  - influxdb-storage:/var/lib/influxdb
     environment:
-  	  - INFLUXDB_DB=db0
-  	  - INFLUXDB_ADMIN_USER=${INFLUXDB_USERNAME}
-  	  - INFLUXDB_ADMIN_PASSWORD=${INFLUXDB_PW}
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=${INFLUXDB_USERNAME}
+      - DOCKER_INFLUXDB_INIT_PASSWORD=${INFLUXDB_PW}
+      - DOCKER_INFLUXDB_INIT_ORG=INFN
+      - DOCKER_INFLUXDB_INIT_BUCKET=INFN-BUCKET
 
   grafana:
-    image: grafana/grafana:8.3.4-ubuntu
+    image: grafana/grafana:9.5.21-ubuntu
     ports:
       - '3000:3000'
     volumes:
@@ -323,8 +332,8 @@ volumes:
 The above multi-container application can be started with the following commands:
 
 ```bash
-export INFLUXDB_USERNAME=admin
-export INFLUXDB_PW=admin
+export INFLUXDB_USERNAME=corsodocker2024
+export INFLUXDB_PW=corsodocker2024
 export GRAFANA_USERNAME=admin
 export GRAFANA_PW=admin
 docker compose up 
@@ -334,10 +343,10 @@ Or write a further file containing all environment variables. This file must be 
 
 ```bash
 user@vm:~/example$ cat .env
-INFLUXDB_USERNAME=admin
-INFLUXDB_PW=admin
-GRAFANA_USERNAME=admin
-GRAFANA_PW=admin
+INFLUXDB_USERNAME=corsodocker2024
+INFLUXDB_PW=corsodocker2024
+GRAFANA_USERNAME=corsodocker2024
+GRAFANA_PW=corsodocker2024
 ```
 
 Docker checks if in the directory is present a `.env` file. In a such a case, it will import the environment variables when the multi-container application is started.
@@ -348,35 +357,36 @@ Environment variable files' content:
 
 ```bash
 user@vm:~/example$ cat influxdb.env
-INFLUXDB_DB=db0
-INFLUXDB_USERNAME=admin
-INFLUXDB_PW=admin
+DOCKER_INFLUXDB_INIT_MODE=setup
+DOCKER_INFLUXDB_INIT_USERNAME=corsodocker2024
+DOCKER_INFLUXDB_INIT_PASSWORD=corsodocker2024
+DOCKER_INFLUXDB_INIT_ORG=INFN
+DOCKER_INFLUXDB_INIT_BUCKET=INFN-BUCKET
 
 user@vm:~/example$ cat grafana.env
-GRAFANA_USERNAME=admin
-GRAFANA_PW=admin
+GF_SECURITY_ADMIN_USER=corsodocker2024
+GF_SECURITY_ADMIN_PASSWORD=corsodocker2024
 ```
 
 Docker compose file:
 
 ```yaml
-version: '3.8'
 services:
   influxdb:
-    image: influxdb:2.1
+    image: influxdb:2.7
     ports:
       - '8086:8086'
     volumes:
-  	  - influxdb-storage:/var/lib/influxdb
+      - influxdb-storage:/var/lib/influxdb
     env_file:
       - influxdb.env
 
   grafana:
-    image: grafana/grafana:8.3.4-ubuntu
+    image: grafana/grafana:9.5.21-ubuntu
     ports:
       - '3000:3000'
     volumes:
-  	  - grafana-storage:/var/lib/grafana
+      - grafana-storage:/var/lib/grafana
     env_file:
       - grafana.env
 
@@ -400,7 +410,7 @@ Default values are allowed:
 ```yaml
 service:
   influxdb:
-    image: influxdb:{$INFLUX_VERSION:-2.1}
+    image: influxdb:{$INFLUX_VERSION:-2.7}
 ```
 
 The default value should be placed after the `:-` characters.
@@ -424,32 +434,35 @@ export INFLUXDB_PW=admin
 docker container run --name influxdb 
            -p 8086:8086 \ 
            -v influxdb-storage:/var/lib/influxdb \
-           -e INFLUXDB_DB=db0 \
-           -e INFLUXDB_ADMIN_USER=${INFLUXDB_USERNAME} \
-           -e INFLUXDB_ADMIN_PASSWORD=${INFLUXDB_PW} \
+           -e DOCKER_INFLUXDB_INIT_MODE=setup \
+           -e DOCKER_INFLUXDB_INIT_USERNAME=${INFLUXDB_USERNAME} \
+           -e DOCKER_INFLUXDB_INIT_PASSWORD=${INFLUXDB_PW} \
+           -e DOCKER_INFLUXDB_INIT_ORG=INFN \
+           -e DOCKER_INFLUXDB_INIT_BUCKET=INFN-BUCKET \
            --health-cmd='curl -f http://localhost:8086||exit 1' \
            --health-start-period=30s \
            --health-interval= 30s \
            --health-timeout=10s \
            --health-retries=4 \
-	       influxdb:2.1
+	       influxdb:2.7
 ```
 
 Docker compose file:
 
 ```yaml
-version: '3.8'
 services:
   influxdb:
-    image: influxdb:2.1
+    image: influxdb:2.7
     ports:
       - '8086:8086'
     volumes:
   	- influxdb-storage:/var/lib/influxdb
     environment:
-  	- INFLUXDB_DB=db0
-  	- INFLUXDB_ADMIN_USER=${INFLUXDB_USERNAME}
-  	- INFLUXDB_ADMIN_PASSWORD=${INFLUXDB_PASSWORD}
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=${INFLUXDB_USERNAME}
+      - DOCKER_INFLUXDB_INIT_PASSWORD=${INFLUXDB_PW}
+      - DOCKER_INFLUXDB_INIT_ORG=INFN
+      - DOCKER_INFLUXDB_INIT_BUCKET=INFN-BUCKET
     healthcheck:
       test: "curl --fail http://localhost:8086 || exit 1"
       start_period: 30s
@@ -469,28 +482,29 @@ For instance, we can configure Grafana to start only after InfluxDB is running.
 The Docker Compose file becomes:
 
 ```yaml
-version: '3.8'
 services:
   influxdb:
-    image: influxdb:2.1
+    image: influxdb:2.7
     ports:
       - '8086:8086'
     volumes:
-  	- influxdb-storage:/var/lib/influxdb
+  	  - influxdb-storage:/var/lib/influxdb
     environment:
-  	- INFLUXDB_DB=db0
-  	- INFLUXDB_ADMIN_USER=${INFLUXDB_USERNAME}
-  	- INFLUXDB_ADMIN_PASSWORD=${INFLUXDB_PASSWORD}
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=${INFLUXDB_USERNAME}
+      - DOCKER_INFLUXDB_INIT_PASSWORD=${INFLUXDB_PW}
+      - DOCKER_INFLUXDB_INIT_ORG=INFN
+      - DOCKER_INFLUXDB_INIT_BUCKET=INFN-BUCKET
   
   grafana:
-    image: grafana/grafana:8.3.4-ubuntu
+    image: grafana/grafana:9.5.21-ubuntu
     ports:
       - '3000:3000'
     volumes:
-  	- grafana-storage:/var/lib/grafana
+  	  - grafana-storage:/var/lib/grafana
     environment:
-  	- GF_SECURITY_ADMIN_USER=${GRAFANA_USERNAME}
-  	- GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
+  	  - GF_SECURITY_ADMIN_USER=${GRAFANA_USERNAME}
+  	  - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
     depends_on:
       - influxdb
 
@@ -506,18 +520,19 @@ Certain applications require tools to be fully functional, not just running. Hea
 The Docker compose file becomes:
 
 ```yaml
-version: '3.8'
 services:
   influxdb:
-    image: influxdb:2.1
+    image: influxdb:2.7
     ports:
       - '8086:8086'
     volumes:
-  	- influxdb-storage:/var/lib/influxdb
+  	  - influxdb-storage:/var/lib/influxdb
     environment:
-  	- INFLUXDB_DB=db0
-  	- INFLUXDB_ADMIN_USER=${INFLUXDB_USERNAME}
-  	- INFLUXDB_ADMIN_PASSWORD=${INFLUXDB_PASSWORD}
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=${INFLUXDB_USERNAME}
+      - DOCKER_INFLUXDB_INIT_PASSWORD=${INFLUXDB_PW}
+      - DOCKER_INFLUXDB_INIT_ORG=INFN
+      - DOCKER_INFLUXDB_INIT_BUCKET=INFN-BUCKET
     healthcheck:
       test: "curl --fail http://localhost:8086 || exit 1"
       start_period: 30s
@@ -526,7 +541,7 @@ services:
       retries: 4
  
   grafana:
-    image: grafana/grafana:8.3.4-ubuntu
+    image: grafana/grafana:9.5.21-ubuntu
     ... 
     depends_on:
       influxdb:
@@ -544,7 +559,6 @@ Unassigned services always start, while assigned ones start only when their corr
 Let's considering the following Docker compose file
 
 ```yaml
-version: "3.8"
 services:
   frontend:
     image: frontend
@@ -637,7 +651,6 @@ sleep(60)
 Docker compose file content:
 
 ```yaml
-version: '3.8'
 services:
   my_service:
     build: .

@@ -38,7 +38,6 @@ Write the docker-compose.yml file for the following Docker CLI inserting the `de
     ```
 === "Solution"
     ```yaml
-    version: '3.8'
     services:
       db:
         image: mariadb:10.6.4-focal
@@ -107,7 +106,6 @@ Write the docker-compose.yml file that builds the following Dockerfile and uses 
     RUN pip install -r /requirements.txt
 
     cat docker-compose.yaml
-    version: '3.8'
     services:
       my_jupyter:
         build: .
