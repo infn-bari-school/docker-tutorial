@@ -123,5 +123,6 @@ Write the docker-compose.yml file that builds the following Dockerfile and uses 
           - --NotebookApp.password=''
     EOF
 
-    docker compose up
+    # To execute the application run:
+    # docker compose up
     ```
