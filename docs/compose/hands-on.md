@@ -27,7 +27,7 @@ Write the docker-compose.yml file for the following Docker CLI inserting the `de
 
     docker run --name wp \
       --network wordpress_net \
-      -v wp_data:/var/www/html
+      -v wp_data:/var/www/html \
       -p 8080:80 \
       -e WORDPRESS_DB_HOST=db \
       -e WORDPRESS_DB_USER=wordpress-user \
