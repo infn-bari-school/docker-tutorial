@@ -5,7 +5,6 @@ Write the docker-compose.yml file for the following Docker CLI inserting the `de
 
 === "Exercise details"
     ```bash
-    docker network create wordpress_net
     docker volume create db_data
     docker volume create wp_data
     docker container run --name db \
@@ -43,8 +42,6 @@ Write the docker-compose.yml file for the following Docker CLI inserting the `de
         image: mariadb:10.6.4-focal
         volumes:
           - db_data:/var/lib/mysql
-        networks:
-          - wp_net
         restart: always
         environment:
           - MYSQL_ROOT_PASSWORD=somewordpress
@@ -77,6 +74,7 @@ Write the docker-compose.yml file for the following Docker CLI inserting the `de
     volumes:
       db_data:
       wp_data:
+    
     ```
 
 ### Exercise 2
