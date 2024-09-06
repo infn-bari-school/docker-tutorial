@@ -52,11 +52,11 @@ Write the docker-compose.yml file for the following Docker CLI inserting the `de
           - MYSQL_USER=wordpress-user
           - MYSQL_PASSWORD=wordpress-password
         healthcheck:
-        test: ["CMD", "mysqladmin", "ping", "--silent"]
-        interval: 10s
-        timeout: 10s
-        retries: 60
-        start_period: 10s
+          test: ["CMD", "mysqladmin", "ping", "--silent"]
+          interval: 10s
+          timeout: 10s
+          retries: 60
+          start_period: 10s
     
       wordpress:
         image: wordpress:latest
