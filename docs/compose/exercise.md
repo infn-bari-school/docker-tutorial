@@ -41,6 +41,7 @@ Write the docker-compose.yml file for the following Docker CLI inserting the `de
     services:
       db:
         image: mariadb:10.6.4-focal
+        container_name: db
         volumes:
           - db_data:/var/lib/mysql
         networks:
@@ -60,6 +61,7 @@ Write the docker-compose.yml file for the following Docker CLI inserting the `de
     
       wordpress:
         image: wordpress:latest
+        container_name: wordpress
         volumes:
           - wp_data:/var/www/html
         networks:
