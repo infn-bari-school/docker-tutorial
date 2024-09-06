@@ -8,7 +8,7 @@ Write the docker-compose.yml file for the following Docker CLI inserting the `de
     docker network create wordpress_net
     docker volume create db_data
     docker volume create wp_data
-    docker container run --name db \
+    docker container run --name hands-on1-db \
       --network wordpress_net \
       -v db_data:/var/lib/mysql \
       -e MYSQL_ROOT_PASSWORD=somewordpress \
@@ -25,7 +25,7 @@ Write the docker-compose.yml file for the following Docker CLI inserting the `de
       -d \
       mariadb:10.6.4-focal
 
-    docker run --name wp \
+    docker run --name hands-on1-wp \
       --network wordpress_net \
       -v wp_data:/var/www/html \
       -p 8080:80 \
@@ -41,7 +41,7 @@ Write the docker-compose.yml file for the following Docker CLI inserting the `de
     services:
       db:
         image: mariadb:10.6.4-focal
-        container_name: db
+        container_name: hands-on1-sol-db
         volumes:
           - db_data:/var/lib/mysql
         networks:
@@ -61,7 +61,7 @@ Write the docker-compose.yml file for the following Docker CLI inserting the `de
     
       wordpress:
         image: wordpress:latest
-        container_name: wordpress
+        container_name: hands-on1-sol-wordpress
         volumes:
           - wp_data:/var/www/html
         networks:
