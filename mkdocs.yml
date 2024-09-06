@@ -68,7 +68,7 @@ nav:
     - Exercises: 'image/automation/exercises.md'
   - Multi-container applications with Docker Compose:
     - Concepts: 'compose/concepts.md'
-    - Exercise: 'compose/exercise.md'
+    - Hands-on: 'compose/hands-on.md'
 
  
 copyright: Copyright &copy; 2024 INFN

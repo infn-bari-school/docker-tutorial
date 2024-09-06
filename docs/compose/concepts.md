@@ -43,7 +43,6 @@ Using the CLI, you can manage the lifecycle of your multi-container applications
 
 The CLI commands enable you to start, stop, and configure your applications effortlessly.
 
-
 * **docker compose up**: initializes and starts the application environment
 * **docker compose start**: starts the application environment
 * **docker compose restart**: restarts the already created application environment

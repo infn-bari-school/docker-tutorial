@@ -1,5 +1,5 @@
 
-### Exercise 1
+### Hands-on 1
 
 Write the docker-compose.yml file for the following Docker CLI inserting the `depends_on` condition on db health check
 
@@ -86,7 +86,7 @@ Write the docker-compose.yml file for the following Docker CLI inserting the `de
       wordpress_net:
     ```
 
-### Exercise 2
+### Hands-on 2
 
 Write the docker-compose.yml file that builds the following Dockerfile and uses it
 
