@@ -96,16 +96,20 @@ Write the docker-compose.yml file that builds the following Dockerfile and uses 
     ```
 === "Solution"
     ```bash
-    cat requirements.txt
+    mkdir exercise2
+    cd exercise2
+    cat > requirements.txt << EOF
     pandas
     numpy
+    EOF
 
-    cat Dockerfile
+    cat > Dockerfile << EOF
     FROM jupyter/minimal-notebook
     COPY requirements.txt /requirements.txt
     RUN pip install -r /requirements.txt
+    EOF
 
-    cat docker-compose.yaml
+    cat > compose.yaml << EOF
     services:
       my_jupyter:
         build: .
@@ -117,4 +121,7 @@ Write the docker-compose.yml file that builds the following Dockerfile and uses 
           - --no-browser --allow-root
           - --NotebookApp.token=''
           - --NotebookApp.password=''
+    EOF
+
+    docker compose up
     ```

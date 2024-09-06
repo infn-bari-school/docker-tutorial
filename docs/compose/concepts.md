@@ -35,9 +35,14 @@ In the YAML file you can notice an basic structure:
 * the **volumes** keyword allows to define volumes to be attach in the containers. 
 * the **networks** keyword allows to define networks to be used in the containers. 
 
-### Docker compose command to control the application status
+### Docker compose CLI
 
-With a single command, it is possible to create, start, stop and destroy all services contaiined in the application:
+The Docker CLI lets you interact with your Docker Compose applications through the `docker compose` command, and its subcommands. 
+
+Using the CLI, you can manage the lifecycle of your multi-container applications defined in the compose.yaml file.
+
+The CLI commands enable you to start, stop, and configure your applications effortlessly.
+
 
 * **docker compose up**: initializes and starts the application environment
 * **docker compose start**: starts the application environment
@@ -50,6 +55,7 @@ With a single command, it is possible to create, start, stop and destroy all ser
 * `docker compose up -d`: initializes and starts the application environment in detacted mode
 * `docker compose ps`: lists the running containers/services
 * `docker compose down -v`: stops and destroys the application environment and volumes
+* `docker compose logs`: shows application logs
 
 #### Start your first multi-container application
 
