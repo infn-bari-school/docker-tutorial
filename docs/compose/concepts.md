@@ -171,7 +171,7 @@ user@vm:~/prova_2$ docker compose down
 ✔ Network prova_2_db_net Removed
 ```
 
-### Network
+### Custom Network configuration
 
 By default Compose sets up a single network for your application.
 
@@ -222,7 +222,7 @@ docker container run --name grafana \
   -v grafana-storage:/var/lib/grafana \
   -e GF_SECURITY_ADMIN_USER=${GRAFANA_USERNAME} \
   -e GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PW} \
-  grafana/grafana:9.5.21-ubuntu
+  grafana/grafana:11.2.0-ubuntu
 ```
 
 The resulting YAML file is:
@@ -245,7 +245,7 @@ services:
       - DOCKER_INFLUXDB_INIT_BUCKET=INFN-BUCKET
 
   grafana:
-    image: grafana/grafana:9.5.21-ubuntu
+    image: grafana/grafana:11.2.0-ubuntu
     ports:
       - '3000:3000'
     networks:
@@ -285,7 +285,7 @@ services:
       - DOCKER_INFLUXDB_INIT_ORG=INFN
       - DOCKER_INFLUXDB_INIT_BUCKET=INFN-BUCKET
   grafana:
-    image: grafana/grafana:9.5.21-ubuntu
+    image: grafana/grafana:11.2.0-ubuntu
     ports:
       - '3000:3000'
     volumes:
@@ -320,7 +320,7 @@ services:
       - DOCKER_INFLUXDB_INIT_BUCKET=INFN-BUCKET
 
   grafana:
-    image: grafana/grafana:9.5.21-ubuntu
+    image: grafana/grafana:11.2.0-ubuntu
     ports:
       - '3000:3000'
     volumes:
@@ -387,7 +387,7 @@ services:
       - influxdb.env
 
   grafana:
-    image: grafana/grafana:9.5.21-ubuntu
+    image: grafana/grafana:11.2.0-ubuntu
     ports:
       - '3000:3000'
     volumes:
@@ -502,7 +502,7 @@ services:
       - DOCKER_INFLUXDB_INIT_BUCKET=INFN-BUCKET
   
   grafana:
-    image: grafana/grafana:9.5.21-ubuntu
+    image: grafana/grafana:11.2.0-ubuntu
     ports:
       - '3000:3000'
     volumes:
@@ -546,7 +546,7 @@ services:
       retries: 4
  
   grafana:
-    image: grafana/grafana:9.5.21-ubuntu
+    image: grafana/grafana:11.2.0-ubuntu
     ... 
     depends_on:
       influxdb:
