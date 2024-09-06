@@ -5,15 +5,15 @@ Write the docker-compose.yml file for the following Docker CLI inserting the `de
 
 === "Exercise details"
     ```bash
-    docker network create h1_wordpress_net
+    docker network create wordpress_net
     docker volume create db_data
     docker volume create wp_data
-    docker container run --name h1_db \
-      --network h1_wordpress_net \
+    docker container run --name db \
+      --network wordpress_net \
       -v db_data:/var/lib/mysql \
       -e MYSQL_ROOT_PASSWORD=somewordpress \
       -e MYSQL_USER=wordpress_user \
-      -e MYSQL_PASSWORD=wordpress_-_password \
+      -e MYSQL_PASSWORD=wordpress_password \
       -e MYSQL_DATABASE=wordpress_db \
       --restart always \
       --health-cmd="mysqladmin ping --silent" \
@@ -25,11 +25,11 @@ Write the docker-compose.yml file for the following Docker CLI inserting the `de
       -d \
       mariadb:10.6.4-focal
 
-    docker run --name h1_wp \
-      --network h1_wordpress_net \
+    docker run --name wp \
+      --network wordpress_net \
       -v wp_data:/var/www/html \
       -p 8080:80 \
-      -e WORDPRESS_DB_HOST=h1_db \
+      -e WORDPRESS_DB_HOST=db \
       -e WORDPRESS_DB_USER=wordpress_user \
       -e WORDPRESS_DB_PASSWORD=wordpress_password \
       -e WORDPRESS_DB_NAME=wordpress_database \
@@ -41,11 +41,8 @@ Write the docker-compose.yml file for the following Docker CLI inserting the `de
     services:
       db:
         image: mariadb:10.6.4-focal
-        container_name: h1s_db
         volumes:
           - db_data:/var/lib/mysql
-        networks:
-          - h1s_wordpress_net
         restart: always
         environment:
           - MYSQL_ROOT_PASSWORD=somewordpress
@@ -61,16 +58,13 @@ Write the docker-compose.yml file for the following Docker CLI inserting the `de
     
       wordpress:
         image: wordpress:latest
-        container_name: h1s_wordpress
         volumes:
           - wp_data:/var/www/html
-        networks:
-          - h1s_wordpress_net
         ports:
           - 8081:80
         restart: always
         environment:
-          - WORDPRESS_DB_HOST=h1s_db
+          - WORDPRESS_DB_HOST=db
           - WORDPRESS_DB_USER=wordpress_user
           - WORDPRESS_DB_PASSWORD=wordpress_password
           - WORDPRESS_DB_NAME=wordpress_database
@@ -81,9 +75,6 @@ Write the docker-compose.yml file for the following Docker CLI inserting the `de
     volumes:
       db_data:
       wp_data:
-    
-    networks:
-      h1s_wordpress_net:
     ```
 
 ### Hands-on 2
