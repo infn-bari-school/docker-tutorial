@@ -5,16 +5,16 @@ Write the docker-compose.yml file for the following Docker CLI inserting the `de
 
 === "Exercise details"
     ```bash
-    docker network create wordpress_net
+    docker network create h1_wordpress_net
     docker volume create db_data
     docker volume create wp_data
-    docker container run --name hands-on1-db \
-      --network wordpress_net \
+    docker container run --name h1_db \
+      --network h1_wordpress_net \
       -v db_data:/var/lib/mysql \
       -e MYSQL_ROOT_PASSWORD=somewordpress \
-      -e MYSQL_USER=wordpress-user \
-      -e MYSQL_PASSWORD=wordpress-password \
-      -e MYSQL_DATABASE=wordpress-db \
+      -e MYSQL_USER=wordpress_user \
+      -e MYSQL_PASSWORD=wordpress_-_password \
+      -e MYSQL_DATABASE=wordpress_db \
       --restart always \
       --health-cmd="mysqladmin ping --silent" \
       --health-interval=10s \
@@ -25,14 +25,14 @@ Write the docker-compose.yml file for the following Docker CLI inserting the `de
       -d \
       mariadb:10.6.4-focal
 
-    docker run --name hands-on1-wp \
-      --network wordpress_net \
+    docker run --name h1_wp \
+      --network h1_wordpress_net \
       -v wp_data:/var/www/html \
       -p 8080:80 \
-      -e WORDPRESS_DB_HOST=hands-on1-db \
-      -e WORDPRESS_DB_USER=wordpress-user \
-      -e WORDPRESS_DB_PASSWORD=wordpress-password \
-      -e WORDPRESS_DB_NAME=wordpress-database \
+      -e WORDPRESS_DB_HOST=h1_db \
+      -e WORDPRESS_DB_USER=wordpress_user \
+      -e WORDPRESS_DB_PASSWORD=wordpress_password \
+      -e WORDPRESS_DB_NAME=wordpress_database \
       -d \
       wordpress
     ```
@@ -41,17 +41,17 @@ Write the docker-compose.yml file for the following Docker CLI inserting the `de
     services:
       db:
         image: mariadb:10.6.4-focal
-        container_name: hands-on1-sol-db
+        container_name: h1s_db
         volumes:
           - db_data:/var/lib/mysql
         networks:
-          - wordpress_net
+          - h1s_wordpress_net
         restart: always
         environment:
           - MYSQL_ROOT_PASSWORD=somewordpress
-          - MYSQL_DATABASE=wordpress-database
-          - MYSQL_USER=wordpress-user
-          - MYSQL_PASSWORD=wordpress-password
+          - MYSQL_DATABASE=wordpress_database
+          - MYSQL_USER=wordpress_user
+          - MYSQL_PASSWORD=wordpress_password
         healthcheck:
           test: ["CMD", "mysqladmin", "ping", "--silent"]
           interval: 10s
@@ -61,19 +61,19 @@ Write the docker-compose.yml file for the following Docker CLI inserting the `de
     
       wordpress:
         image: wordpress:latest
-        container_name: hands-on1-sol-wordpress
+        container_name: h1s_wordpress
         volumes:
           - wp_data:/var/www/html
         networks:
-          - wordpress_net
+          - h1s_wordpress_net
         ports:
           - 8081:80
         restart: always
         environment:
-          - WORDPRESS_DB_HOST=hands-on1-sol-db
-          - WORDPRESS_DB_USER=wordpress-user
-          - WORDPRESS_DB_PASSWORD=wordpress-password
-          - WORDPRESS_DB_NAME=wordpress-database
+          - WORDPRESS_DB_HOST=h1s_db
+          - WORDPRESS_DB_USER=wordpress_user
+          - WORDPRESS_DB_PASSWORD=wordpress_password
+          - WORDPRESS_DB_NAME=wordpress_database
         depends_on:
           db:
             condition: service_healthy
@@ -83,7 +83,7 @@ Write the docker-compose.yml file for the following Docker CLI inserting the `de
       wp_data:
     
     networks:
-      wordpress_net:
+      h1s_wordpress_net:
     ```
 
 ### Hands-on 2
