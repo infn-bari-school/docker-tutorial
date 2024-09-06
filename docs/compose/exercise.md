@@ -115,12 +115,7 @@ Write the docker-compose.yml file that builds the following Dockerfile and uses 
         build: .
         ports:
           - 8888:8888
-        command: 
-          - /opt/conda/bin/python3.11
-          - /opt/conda/bin/jupyter-lab 
-          - --no-browser --allow-root
-          - --NotebookApp.token=''
-          - --NotebookApp.password=''
+        command: ["/opt/conda/bin/python3.11", "/opt/conda/bin/jupyter-lab" , "--no-browser --allow-root", "--NotebookApp.token=''", "--NotebookApp.password=''" ]
     EOF
 
     # To execute the application run:
