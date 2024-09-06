@@ -29,7 +29,7 @@ Write the docker-compose.yml file for the following Docker CLI inserting the `de
       --network wordpress_net \
       -v wp_data:/var/www/html \
       -p 8080:80 \
-      -e WORDPRESS_DB_HOST=db \
+      -e WORDPRESS_DB_HOST=hands-on1-db \
       -e WORDPRESS_DB_USER=wordpress-user \
       -e WORDPRESS_DB_PASSWORD=wordpress-password \
       -e WORDPRESS_DB_NAME=wordpress-database \
@@ -70,7 +70,7 @@ Write the docker-compose.yml file for the following Docker CLI inserting the `de
           - 8081:80
         restart: always
         environment:
-          - WORDPRESS_DB_HOST=db
+          - WORDPRESS_DB_HOST=hands-on1-sol-db
           - WORDPRESS_DB_USER=wordpress-user
           - WORDPRESS_DB_PASSWORD=wordpress-password
           - WORDPRESS_DB_NAME=wordpress-database
