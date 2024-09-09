@@ -5,8 +5,8 @@ In this section you'll learn how to leverage CI/CD pipilines in INFN baltig (or 
 - baltig.infn.it account and access
 - gitlab CLI:
     ````bash
-    wget https://gitlab.com/gitlab-org/cli/-/releases/v1.32.0/downloads/glab_1.32.0_Linux_x86_64.deb
-    sudo dpkg -i glab_1.32.0_Linux_x86_64.deb
+    wget https://gitlab.com/gitlab-org/cli/-/releases/v1.46.0/downloads/glab_1.46.0_Linux_x86_64.deb
+    sudo dpkg -i glab_1.46.0_Linux_x86_64.deb
     ````
 - a baltig token with 'api' and 'write_repository' scopes (see below)
 - having followed the [previous](../dockerfile/exercise.md) tutorial
@@ -107,105 +107,10 @@ Once completed you should be able to see the docker image stored on gitlab regis
 
 The container is now ready to be pulled from the registry via: `docker pull baltig.infn.it:4567/ciangottini/tutorial-ci`
 
-## Dagger.io preview
 
-- Install the [CLI](https://docs.dagger.io/quickstart/729236/cli#install-the-dagger-cli) and the [SDK](https://docs.dagger.io/quickstart/628381/sdk) via pip3, as they are needed to test the pipeline locally.
-- Then create a file in `ci/main.py` with the example code doing the following:
-    - build the flask image
-    - instantiate a webserver for tests
-    - test the response correctness
-    - publish the image
- 
-```python
-import random
-import sys
+## Exercises
 
-import anyio
-import httpx
+- Create a pipeline to periodically build your latest tag
 
-import json
+- Push image to dockerHUB instead
 
-import anyio
-import dagger
-
-
-async def main():
-    config = dagger.Config(log_output=sys.stdout)
-
-    async with dagger.Connection(config) as client:
-        # set build context
-        context_dir = client.host().directory(".")
-
-        # build using Dockerfile
-        container = (
-            await context_dir.docker_build()
-        )
-
-        # execute the container as a service to be tested against
-        http_srv = (
-            container.with_env_variable(name="ENVIRONMENT", value="dagger-test")
-                .with_env_variable(name="PORT", value="8080")
-                .with_exposed_port(8080)
-                .as_service()
-        )
-
-        # expose HTTP service to host
-        tunnel = await client.host().tunnel(http_srv).start()
-
-        # get HTTP service address
-        endpoint = await tunnel.endpoint()
-
-        # access HTTP service from host
-        async with httpx.AsyncClient() as http:
-            r = await http.get(f"http://{endpoint}")
-            print(r.status_code)
-            print(r.text)
-
-            result = json.loads(r.text)
-            expected = {"env":"dagger-test"}
-            if r.status_code==200 and result==expected:
-                pass
-            elif result==expected:
-                print(f"{result}!={expected}")
-                sys.exit(1)
-            else:
-                print(f"Status code: {r.status_code}")
-                sys.exit(1)
-
-        image_ref = await container.publish(f"baltig.infn.it:4567/ciangottini/tutorial-ci-23/hello-dagger-{random.randint(0, 10000000)}")
-
-    print(f"Published image to: {image_ref}")
-
-
-
-anyio.run(main)
-```
-
-You can easily try locally the whole chain with:
-
-```bash
-dagger run python ci/main.py
-```
-
-And just as easily integrate it into a gitlab pipeline with the following content to be appended into `.gitlab-ci.yml`:
-
-```yaml
-.docker:
-  image: python:3-alpine
-  services:
-    - docker:dind
-.dagger:
-  extends: [.docker]
-  before_script:
-    - apk add docker-cli curl
-    - cd /usr/local && { curl -L https://dl.dagger.io/dagger/install.sh | sh; cd -; }
-    - docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} baltig.infn.it:4567
-build-deploy:
-  extends: [.dagger]
-  script:
-    - apk add python3-dev gcc libc-dev
-    - pip install --upgrade pip && pip install dagger-io httpx
-    - dagger run python ci/main.py
-```
-
-For more details and examples visit the [Dagger.io](https://docs.dagger.io/quickstart/593914/hello) documentation

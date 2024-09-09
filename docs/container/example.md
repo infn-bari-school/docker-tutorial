@@ -12,32 +12,32 @@ docker search nginx
 You will get something like the following output:
 
 ```bash
-NAME                                              DESCRIPTION                                     STARS     OFFICIAL   AUTOMATED
-nginx                                             Official build of Nginx.                        18966     [OK]
-unit                                              Official build of NGINX Unit: Universal Web …   10        [OK]
-nginxinc/nginx-unprivileged                       Unprivileged NGINX Dockerfiles                  118
-nginx/nginx-ingress                               NGINX and  NGINX Plus Ingress Controllers fo…   76
-nginx/nginx-prometheus-exporter                   NGINX Prometheus Exporter for NGINX and NGIN…   33
-nginx/unit                                        NGINX Unit is a dynamic web and application …   64
-nginxinc/nginx-s3-gateway                         Authenticating and caching gateway based on …   2
-nginx/nginx-ingress-operator                      NGINX Ingress Operator for NGINX and NGINX P…   0
-nginxinc/amplify-agent                            NGINX Amplify Agent docker repository           1
-nginx/nginx-quic-qns                              NGINX QUIC interop                              1
-nginxinc/ingress-demo                             Ingress Demo                                    4
-nginxproxy/nginx-proxy                            Automated Nginx reverse proxy for docker con…   102
-nginxproxy/acme-companion                         Automated ACME SSL certificate generation fo…   123
-bitnami/nginx                                     Bitnami nginx Docker Image                      172                  [OK]
-bitnami/nginx-ingress-controller                  Bitnami Docker Image for NGINX Ingress Contr…   29                   [OK]
-ubuntu/nginx                                      Nginx, a high-performance reverse proxy & we…   98
-nginxinc/nginmesh_proxy_debug                                                                     0
-nginxproxy/docker-gen                             Generate files from docker container meta-da…   12
-kasmweb/nginx                                     An Nginx image based off nginx:alpine and in…   6
-nginxinc/mra-fakes3                                                                               0
-rancher/nginx-ingress-controller                                                                  11
-nginxinc/ngx-rust-tool                                                                            0
-nginxinc/mra_python_base                                                                          0
-nginxinc/nginmesh_proxy_init                                                                      0
-rancher/nginx-ingress-controller-defaultbackend                                                   2
+NAME                              DESCRIPTION                                     STARS     OFFICIAL
+nginx                             Official build of Nginx.                        20157     [OK]
+nginx/nginx-quic-qns              NGINX QUIC interop                              1
+nginx/nginx-ingress               NGINX and  NGINX Plus Ingress Controllers fo…   94
+nginx/nginx-ingress-operator      NGINX Ingress Operator for NGINX and NGINX P…   2
+nginx/nginx-prometheus-exporter   NGINX Prometheus Exporter for NGINX and NGIN…   43
+nginx/unit                        This repository is retired, use the Docker o…   63
+nginx/unit-preview                Unit preview features                           0
+bitnami/nginx                     Bitnami container image for NGINX               193
+rapidfort/nginx                   RapidFort optimized, hardened image for NGINX   15
+kasmweb/nginx                     An Nginx image based off nginx:alpine and in…   8
+ubuntu/nginx                      Nginx, a high-performance reverse proxy & we…   116
+chainguard/nginx                  Minimal Wolfi-based nginx HTTP, reverse prox…   2
+dockette/nginx                    Nginx SSL / HSTS / HTTP2                        3
+jitesoft/nginx                    Nginx on alpine linux                           0
+docksal/nginx                     Nginx service image for Docksal                 0
+gluufederation/nginx               A customized NGINX image containing a consu…   1
+okteto/nginx                                                                      0
+objectscale/nginx                                                                 0
+intel/nginx                                                                       0
+circleci/nginx                    This image is for internal use                  2
+bitnamicharts/nginx                                                               0
+vmware/nginx                                                                      2
+rancher/nginx                                                                     2
+linuxserver/nginx                 An Nginx container, brought to you by LinuxS…   217
+redash/nginx                      Pre-configured nginx to proxy linked contain…   2
 ```
 !!! tip
     The `docker search` command returns the following image information:
@@ -61,14 +61,14 @@ docker image pull nginx
 ```bash
 Using default tag: latest
 latest: Pulling from library/nginx
-52d2b7f179e3: Pull complete
-fd9f026c6310: Pull complete
-055fa98b4363: Pull complete
-96576293dd29: Pull complete
-a7c4092be904: Pull complete
-e3b6889c8954: Pull complete
-da761d9a302b: Pull complete
-Digest: sha256:104c7c5c54f2685f0f46f3be607ce60da7085da3eaa5ad22d3d9f01594295e9c
+e4fff0779e6d: Pull complete
+2a0cb278fd9f: Pull complete
+7045d6c32ae2: Pull complete
+03de31afb035: Pull complete
+0f17be8dcff2: Pull complete
+14b7e5e8f394: Pull complete
+23fa5a7b99a6: Pull complete
+Digest: sha256:447a8665cc1dab95b1ca778e162215839ccbb9189104c79d7ec3a81e14577add
 Status: Downloaded newer image for nginx:latest
 docker.io/library/nginx:latest
 ```
@@ -81,10 +81,10 @@ docker image ls
 The output of this command provides useful information, including the size of the image:
 
 ```bash
-REPOSITORY    TAG       IMAGE ID       CREATED        SIZE
-nginx         latest    eea7b3dcba7e   2 weeks ago    187MB
-ubuntu        latest    c6b84b685f35   2 weeks ago    77.8MB
-hello-world   latest    9c7a54a9a43c   4 months ago   13.3kB
+REPOSITORY    TAG       IMAGE ID       CREATED         SIZE
+nginx         latest    5ef79149e0ec   2 weeks ago     188MB
+ubuntu        latest    edbfe74c41f8   4 weeks ago     78.1MB
+hello-world   latest    d2c94e258dcb   16 months ago   13.3kB
 ```
 
 Let's have a look at the image with the commands we have already seen in the previous section:
@@ -93,58 +93,20 @@ Let's have a look at the image with the commands we have already seen in the pre
 docker image inspect nginx
 ```
 
-```bash linenums="1" hl_lines="29 37 61"
+```bash linenums="1" hl_lines="30 23 37-39"
 [
     {
-        "Id": "sha256:eea7b3dcba7ee47c0d16a60cc85d2b977d166be3960541991f3e6294d795ed24",
+        "Id": "sha256:5ef79149e0ec84a7a9f9284c3f91aa3c20608f8391f5445eabe92ef07dbda03c",
         "RepoTags": [
             "nginx:latest"
         ],
         "RepoDigests": [
-            "nginx@sha256:104c7c5c54f2685f0f46f3be607ce60da7085da3eaa5ad22d3d9f01594295e9c"
+            "nginx@sha256:447a8665cc1dab95b1ca778e162215839ccbb9189104c79d7ec3a81e14577add"
         ],
         "Parent": "",
-        "Comment": "",
-        "Created": "2023-08-16T09:50:55.765544033Z",
-        "Container": "50b019921f82064e1d8af7e2723929d4c5fafcfd6d8b03595711bd1e455dd3c4",
-        "ContainerConfig": {
-            "Hostname": "50b019921f82",
-            "Domainname": "",
-            "User": "",
-            "AttachStdin": false,
-            "AttachStdout": false,
-            "AttachStderr": false,
-            "ExposedPorts": {
-                "80/tcp": {}
-            },
-            "Tty": false,
-            "OpenStdin": false,
-            "StdinOnce": false,
-            "Env": [
-                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
-                "NGINX_VERSION=1.25.2",
-                "NJS_VERSION=0.8.0",
-                "PKG_RELEASE=1~bookworm"
-            ],
-            "Cmd": [
-                "/bin/sh",
-                "-c",
-                "#(nop) ",
-                "CMD [\"nginx\" \"-g\" \"daemon off;\"]"
-            ],
-            "Image": "sha256:d59ed5fe14c2a306f94488f41ddc8fb060312ee31997f5e077a4c4b29b19114e",
-            "Volumes": null,
-            "WorkingDir": "",
-            "Entrypoint": [
-                "/docker-entrypoint.sh"
-            ],
-            "OnBuild": null,
-            "Labels": {
-                "maintainer": "NGINX Docker Maintainers <docker-maint@nginx.com>"
-            },
-            "StopSignal": "SIGQUIT"
-        },
-        "DockerVersion": "20.10.23",
+        "Comment": "buildkit.dockerfile.v0",
+        "Created": "2024-08-14T21:31:12Z",
+        "DockerVersion": "",
         "Author": "",
         "Config": {
             "Hostname": "",
@@ -161,16 +123,19 @@ docker image inspect nginx
             "StdinOnce": false,
             "Env": [
                 "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
-                "NGINX_VERSION=1.25.2",
-                "NJS_VERSION=0.8.0",
-                "PKG_RELEASE=1~bookworm"
+                "NGINX_VERSION=1.27.1",
+                "NJS_VERSION=0.8.5",
+                "NJS_RELEASE=1~bookworm",
+                "PKG_RELEASE=1~bookworm",
+                "DYNPKG_RELEASE=2~bookworm"
             ],
             "Cmd": [
                 "nginx",
                 "-g",
                 "daemon off;"
             ],
-            "Image": "sha256:d59ed5fe14c2a306f94488f41ddc8fb060312ee31997f5e077a4c4b29b19114e",
+            "ArgsEscaped": true,
+            "Image": "",
             "Volumes": null,
             "WorkingDir": "",
             "Entrypoint": [
@@ -184,27 +149,26 @@ docker image inspect nginx
         },
         "Architecture": "amd64",
         "Os": "linux",
-        "Size": 186639842,
-        "VirtualSize": 186639842,
+        "Size": 187694648,
         "GraphDriver": {
             "Data": {
-                "LowerDir": "/var/lib/docker/overlay2/8072cde78daa76af66dabe39fb661b0faf407786de21649c26fc18a6e1faf6a2/diff:/var/lib/docker/overlay2/4478bca3aabcb4ad7375573863ae4470ccc6aa5dfdbf055d94f881ea364f2da7/diff:/var/lib/docker/overlay2/f982333ae41a3a42a3eb7046e74def02cd1c2e6ddbc5d8bb2966720911f3ce5e/diff:/var/lib/docker/overlay2/e15b9368ef0bf3c0c048c6ca2ae517d3136663880fae208addb20574c9032e64/diff:/var/lib/docker/overlay2/927f8fc9244550a2d1da3449dd58bbdb98bf3d294f094436ac62761790dfaab8/diff:/var/lib/docker/overlay2/edb78366fb60e8316a834b56050484af04954ca588288d8cece3b38f6783fd72/diff",
-                "MergedDir": "/var/lib/docker/overlay2/511ad049a7c912383723eb26a7112997bf95c2b0033e9effa50fbb21dae974ac/merged",
-                "UpperDir": "/var/lib/docker/overlay2/511ad049a7c912383723eb26a7112997bf95c2b0033e9effa50fbb21dae974ac/diff",
-                "WorkDir": "/var/lib/docker/overlay2/511ad049a7c912383723eb26a7112997bf95c2b0033e9effa50fbb21dae974ac/work"
+                "LowerDir": "/var/lib/docker/overlay2/29bfd1646b549c5a2e7488cd2df0cfbf5b31e6e452390a6419590f798a5be2b7/diff:/var/lib/docker/overlay2/b9732ca651e6793c280fe0b6408bbebe59bbbebbdd596b40cfd51f469243892a/diff:/var/lib/docker/overlay2/2e84243b34f95d37bd725e031f33665c8a2ec89d99824bcb96a0694a52dcb7c9/diff:/var/lib/docker/overlay2/4d59513c75c18791768dc9a21232185999d0fa81c65506e950842b46565fb20b/diff:/var/lib/docker/overlay2/4bd3dd2794ec1e9f2729f9252882a1728abbd44a2e417feb55fbd019857d7054/diff:/var/lib/docker/overlay2/9145ec71e543c915530869f33be035a9f64642f304aa39acdd73b64d6d667d48/diff",
+                "MergedDir": "/var/lib/docker/overlay2/670ced786458f0d0102c989a939e8808fdfd0e8c982c70d6173b7d7b36fe9e9d/merged",
+                "UpperDir": "/var/lib/docker/overlay2/670ced786458f0d0102c989a939e8808fdfd0e8c982c70d6173b7d7b36fe9e9d/diff",
+                "WorkDir": "/var/lib/docker/overlay2/670ced786458f0d0102c989a939e8808fdfd0e8c982c70d6173b7d7b36fe9e9d/work"
             },
             "Name": "overlay2"
         },
         "RootFS": {
             "Type": "layers",
             "Layers": [
-                "sha256:511780f88f80081112aea1bfdca6c800e1983e401b338e20b2c6e97f384e4299",
-                "sha256:4713cb24eeff341d0c36343149beba247572a5ff65c2be5b5d9baafb345c7393",
-                "sha256:d0a62f56ef413f60049bc87e43e60032b2a2ab8d931e15b86ee0286c85ae91a2",
-                "sha256:8a7e12012e6f60450e6d2d777b2a2c2256d34a0ccd84d605f72cc5329a87c8b8",
-                "sha256:e161c3f476b5199ab13856c7e190ed12a6562b7be059c7026ae9f594e1abbcaf",
-                "sha256:6fb960878295b567d25900b590157b976d080340caeaa8bf8c46d38c01b4537d",
-                "sha256:563c64030925e9016a2329d3a2b7d47b0c90931baf5d2d0aa926c4c8d94ab894"
+                "sha256:9853575bc4f955c5892dd64187538a6cd02dba6968eba9201854876a7a257034",
+                "sha256:72db5db515fdd9ae82b759fc207fdfbcc31567c28bb87950abc94ce1d60b2d40",
+                "sha256:8b87c0c6652495401acfbe029ede84a5f327664770561ba5f8b7fe9149f52dd0",
+                "sha256:ec1a2ca4ac8784def146544fc7068db06a188d2da4fd7c4e134a76415b8bc1a8",
+                "sha256:55e54df86207fa772302a6fc1e78eb60bd7e3ebd4f913ef7f5ad668ad69ab64d",
+                "sha256:f4f00eaedec7933a48b09f3948c685c41d55f0bf5906295dd022c05b65082344",
+                "sha256:5f0272c6e96d5cd8ea1c6507cfce81980d4b99322bd037d99250a79d4c0b9f1a"
             ]
         },
         "Metadata": {
@@ -214,7 +178,7 @@ docker image inspect nginx
 ]
 ```
 
-We can see that the nginx version in our container will be `1.25.2`, the service will be listening on port `80` and the command that will be executed at the container start is `nginx -g daemon off;`.
+We can see that the nginx version in our container will be `1.27.1`, the service will be listening on port `80` and the command that will be executed at the container start is `nginx -g daemon off;`.
 
 This is a useful exercise, but in general you will find these information in the [description](https://hub.docker.com/_/nginx?tab=description&page=1&ordering=last_updated){:target=_blank} of the image on Docker hub.
 
@@ -245,7 +209,7 @@ docker container ps
 ```bash
 docker container ps
 CONTAINER ID   IMAGE     COMMAND                  CREATED          STATUS          PORTS     NAMES
-43d8e7c9a160   nginx     "/docker-entrypoint.…"   17 seconds ago   Up 9 seconds    80/tcp    nginx
+43147119c02a   nginx     "/docker-entrypoint.…"   20 seconds ago   Up 12 seconds   80/tcp    nginx
 ```
 
 ### Getting the container log
@@ -267,14 +231,14 @@ docker container logs nginx
 /docker-entrypoint.sh: Launching /docker-entrypoint.d/20-envsubst-on-templates.sh
 /docker-entrypoint.sh: Launching /docker-entrypoint.d/30-tune-worker-processes.sh
 /docker-entrypoint.sh: Configuration complete; ready for start up
-2023/09/04 08:08:28 [notice] 1#1: using the "epoll" event method
-2023/09/04 08:08:28 [notice] 1#1: nginx/1.25.2
-2023/09/04 08:08:28 [notice] 1#1: built by gcc 12.2.0 (Debian 12.2.0-14)
-2023/09/04 08:08:28 [notice] 1#1: OS: Linux 5.15.0-82-generic
-2023/09/04 08:08:28 [notice] 1#1: getrlimit(RLIMIT_NOFILE): 1048576:1048576
-2023/09/04 08:08:28 [notice] 1#1: start worker processes
-2023/09/04 08:08:28 [notice] 1#1: start worker process 29
-2023/09/04 08:08:28 [notice] 1#1: start worker process 30
+2024/09/04 14:09:50 [notice] 1#1: using the "epoll" event method
+2024/09/04 14:09:50 [notice] 1#1: nginx/1.27.1
+2024/09/04 14:09:50 [notice] 1#1: built by gcc 12.2.0 (Debian 12.2.0-14)
+2024/09/04 14:09:50 [notice] 1#1: OS: Linux 6.8.0-40-generic
+2024/09/04 14:09:50 [notice] 1#1: getrlimit(RLIMIT_NOFILE): 1048576:1048576
+2024/09/04 14:09:50 [notice] 1#1: start worker processes
+2024/09/04 14:09:50 [notice] 1#1: start worker process 29
+2024/09/04 14:09:50 [notice] 1#1: start worker process 30
 ```
 
 !!! tip
@@ -289,9 +253,9 @@ We can inspect the processes running inside our container using the `docker cont
 ```bash
 docker container top nginx
 UID                 PID                 PPID                C                   STIME               TTY                 TIME                CMD
-root                4989                4969                0                   08:08               ?                   00:00:00            nginx: master process nginx -g daemon off;
-systemd+            5035                4989                0                   08:08               ?                   00:00:00            nginx: worker process
-systemd+            5036                4989                0                   08:08               ?                   00:00:00            nginx: worker process
+root                49252               49232               0                   14:09               ?                   00:00:00            nginx: master process nginx -g daemon off;
+message+            49301               49252               0                   14:09               ?                   00:00:00            nginx: worker process
+message+            49302               49252               0                   14:09               ?                   00:00:00            nginx: worker process
 ```
 
 ### Finding out more about our container
@@ -309,8 +273,8 @@ Let's use again the command `docker container inspect` to get more information a
     ```bash
     [
         {
-            "Id": "43d8e7c9a160a792bb7b9e85fd589c2986504edc0a8f7698473648dd71ee8810",
-            "Created": "2023-09-04T08:08:19.846675755Z",
+            "Id": "43147119c02a544cffcc2e99a2bd634b6fcec63406e4d9ac510821f5cf140e60",
+            "Created": "2024-09-04T14:09:42.284257833Z",
             "Path": "/docker-entrypoint.sh",
             "Args": [
                 "nginx",
@@ -324,17 +288,17 @@ Let's use again the command `docker container inspect` to get more information a
                 "Restarting": false,
                 "OOMKilled": false,
                 "Dead": false,
-                "Pid": 4989,
+                "Pid": 49252,
                 "ExitCode": 0,
                 "Error": "",
-                "StartedAt": "2023-09-04T08:08:27.030292632Z",
+                "StartedAt": "2024-09-04T14:09:49.261329401Z",
                 "FinishedAt": "0001-01-01T00:00:00Z"
             },
-            "Image": "sha256:eea7b3dcba7ee47c0d16a60cc85d2b977d166be3960541991f3e6294d795ed24",
-            "ResolvConfPath": "/var/lib/docker/containers/43d8e7c9a160a792bb7b9e85fd589c2986504edc0a8f7698473648dd71ee8810/resolv.conf",
-            "HostnamePath": "/var/lib/docker/containers/43d8e7c9a160a792bb7b9e85fd589c2986504edc0a8f7698473648dd71ee8810/hostname",
-            "HostsPath": "/var/lib/docker/containers/43d8e7c9a160a792bb7b9e85fd589c2986504edc0a8f7698473648dd71ee8810/hosts",
-            "LogPath": "/var/lib/docker/containers/43d8e7c9a160a792bb7b9e85fd589c2986504edc0a8f7698473648dd71ee8810/43d8e7c9a160a792bb7b9e85fd589c2986504edc0a8f7698473648dd71ee8810-json.log",
+            "Image": "sha256:5ef79149e0ec84a7a9f9284c3f91aa3c20608f8391f5445eabe92ef07dbda03c",
+            "ResolvConfPath": "/var/lib/docker/containers/43147119c02a544cffcc2e99a2bd634b6fcec63406e4d9ac510821f5cf140e60/resolv.conf",
+            "HostnamePath": "/var/lib/docker/containers/43147119c02a544cffcc2e99a2bd634b6fcec63406e4d9ac510821f5cf140e60/hostname",
+            "HostsPath": "/var/lib/docker/containers/43147119c02a544cffcc2e99a2bd634b6fcec63406e4d9ac510821f5cf140e60/hosts",
+            "LogPath": "/var/lib/docker/containers/43147119c02a544cffcc2e99a2bd634b6fcec63406e4d9ac510821f5cf140e60/43147119c02a544cffcc2e99a2bd634b6fcec63406e4d9ac510821f5cf140e60-json.log",
             "Name": "/nginx",
             "RestartCount": 0,
             "Driver": "overlay2",
@@ -350,7 +314,7 @@ Let's use again the command `docker container inspect` to get more information a
                     "Type": "json-file",
                     "Config": {}
                 },
-                "NetworkMode": "default",
+                "NetworkMode": "bridge",
                 "PortBindings": {},
                 "RestartPolicy": {
                     "Name": "no",
@@ -360,8 +324,8 @@ Let's use again the command `docker container inspect` to get more information a
                 "VolumeDriver": "",
                 "VolumesFrom": null,
                 "ConsoleSize": [
-                    60,
-                    281
+                    39,
+                    178
                 ],
                 "CapAdd": null,
                 "CapDrop": null,
@@ -409,7 +373,7 @@ Let's use again the command `docker container inspect` to get more information a
                 "MemorySwappiness": null,
                 "OomKillDisable": null,
                 "PidsLimit": null,
-                "Ulimits": null,
+                "Ulimits": [],
                 "CpuCount": 0,
                 "CpuPercent": 0,
                 "IOMaximumIOps": 0,
@@ -424,7 +388,8 @@ Let's use again the command `docker container inspect` to get more information a
                     "/proc/timer_stats",
                     "/proc/sched_debug",
                     "/proc/scsi",
-                    "/sys/firmware"
+                    "/sys/firmware",
+                    "/sys/devices/virtual/powercap"
                 ],
                 "ReadonlyPaths": [
                     "/proc/bus",
@@ -436,16 +401,16 @@ Let's use again the command `docker container inspect` to get more information a
             },
             "GraphDriver": {
                 "Data": {
-                    "LowerDir": "/var/lib/docker/overlay2/1485063bd2a8e353b620248832fdae8836b6050e9499d293d1b65c5608a0433f-init/diff:/var/lib/docker/overlay2/511ad049a7c912383723eb26a7112997bf95c2b0033e9effa50fbb21dae974ac/diff:/var/lib/docker/overlay2/8072cde78daa76af66dabe39fb661b0faf407786de21649c26fc18a6e1faf6a2/diff:/var/lib/docker/overlay2/4478bca3aabcb4ad7375573863ae4470ccc6aa5dfdbf055d94f881ea364f2da7/diff:/var/lib/docker/overlay2/f982333ae41a3a42a3eb7046e74def02cd1c2e6ddbc5d8bb2966720911f3ce5e/diff:/var/lib/docker/overlay2/e15b9368ef0bf3c0c048c6ca2ae517d3136663880fae208addb20574c9032e64/diff:/var/lib/docker/overlay2/927f8fc9244550a2d1da3449dd58bbdb98bf3d294f094436ac62761790dfaab8/diff:/var/lib/docker/overlay2/edb78366fb60e8316a834b56050484af04954ca588288d8cece3b38f6783fd72/diff",
-                    "MergedDir": "/var/lib/docker/overlay2/1485063bd2a8e353b620248832fdae8836b6050e9499d293d1b65c5608a0433f/merged",
-                    "UpperDir": "/var/lib/docker/overlay2/1485063bd2a8e353b620248832fdae8836b6050e9499d293d1b65c5608a0433f/diff",
-                    "WorkDir": "/var/lib/docker/overlay2/1485063bd2a8e353b620248832fdae8836b6050e9499d293d1b65c5608a0433f/work"
+                    "LowerDir": "/var/lib/docker/overlay2/2439f7d82ca5c505d4b56fde68aa78ba7caf71b3ca2cf1598dddff528566a964-init/diff:/var/lib/docker/overlay2/670ced786458f0d0102c989a939e8808fdfd0e8c982c70d6173b7d7b36fe9e9d/diff:/var/lib/docker/overlay2/29bfd1646b549c5a2e7488cd2df0cfbf5b31e6e452390a6419590f798a5be2b7/diff:/var/lib/docker/overlay2/b9732ca651e6793c280fe0b6408bbebe59bbbebbdd596b40cfd51f469243892a/diff:/var/lib/docker/overlay2/2e84243b34f95d37bd725e031f33665c8a2ec89d99824bcb96a0694a52dcb7c9/diff:/var/lib/docker/overlay2/4d59513c75c18791768dc9a21232185999d0fa81c65506e950842b46565fb20b/diff:/var/lib/docker/overlay2/4bd3dd2794ec1e9f2729f9252882a1728abbd44a2e417feb55fbd019857d7054/diff:/var/lib/docker/overlay2/9145ec71e543c915530869f33be035a9f64642f304aa39acdd73b64d6d667d48/diff",
+                    "MergedDir": "/var/lib/docker/overlay2/2439f7d82ca5c505d4b56fde68aa78ba7caf71b3ca2cf1598dddff528566a964/merged",
+                    "UpperDir": "/var/lib/docker/overlay2/2439f7d82ca5c505d4b56fde68aa78ba7caf71b3ca2cf1598dddff528566a964/diff",
+                    "WorkDir": "/var/lib/docker/overlay2/2439f7d82ca5c505d4b56fde68aa78ba7caf71b3ca2cf1598dddff528566a964/work"
                 },
                 "Name": "overlay2"
             },
             "Mounts": [],
             "Config": {
-                "Hostname": "43d8e7c9a160",
+                "Hostname": "43147119c02a",
                 "Domainname": "",
                 "User": "",
                 "AttachStdin": false,
@@ -459,9 +424,11 @@ Let's use again the command `docker container inspect` to get more information a
                 "StdinOnce": false,
                 "Env": [
                     "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
-                    "NGINX_VERSION=1.25.2",
-                    "NJS_VERSION=0.8.0",
-                    "PKG_RELEASE=1~bookworm"
+                    "NGINX_VERSION=1.27.1",
+                    "NJS_VERSION=0.8.5",
+                    "NJS_RELEASE=1~bookworm",
+                    "PKG_RELEASE=1~bookworm",
+                    "DYNPKG_RELEASE=2~bookworm"
                 ],
                 "Cmd": [
                     "nginx",
@@ -482,17 +449,17 @@ Let's use again the command `docker container inspect` to get more information a
             },
             "NetworkSettings": {
                 "Bridge": "",
-                "SandboxID": "0f0dc6953649e1d30c725332e4071257dd750addd46a6c0aa0c6e77a96e31364",
-                "HairpinMode": false,
-                "LinkLocalIPv6Address": "",
-                "LinkLocalIPv6PrefixLen": 0,
+                "SandboxID": "4c76fb8e97c6aca6858a8476d764d259fbebbb97c38b48f6b65a8bd8413eb165",
+                "SandboxKey": "/var/run/docker/netns/4c76fb8e97c6",
                 "Ports": {
                     "80/tcp": null
                 },
-                "SandboxKey": "/var/run/docker/netns/0f0dc6953649",
+                "HairpinMode": false,
+                "LinkLocalIPv6Address": "",
+                "LinkLocalIPv6PrefixLen": 0,
                 "SecondaryIPAddresses": null,
                 "SecondaryIPv6Addresses": null,
-                "EndpointID": "25e03f10335ea9356d88ad67ed999291d6c6e26c3f91a1fd8853772a3988604f",
+                "EndpointID": "cbfee38857162451d749c7772167ac9d01c9fb844b76211aa41c0b239b384472",
                 "Gateway": "172.17.0.1",
                 "GlobalIPv6Address": "",
                 "GlobalIPv6PrefixLen": 0,
@@ -505,16 +472,17 @@ Let's use again the command `docker container inspect` to get more information a
                         "IPAMConfig": null,
                         "Links": null,
                         "Aliases": null,
-                        "NetworkID": "6e452f5b4a2bc0f04db8a0393f0346a1a6852379c7443adb20cbb5a05b3c52bf",
-                        "EndpointID": "25e03f10335ea9356d88ad67ed999291d6c6e26c3f91a1fd8853772a3988604f",
+                        "MacAddress": "02:42:ac:11:00:03",
+                        "DriverOpts": null,
+                        "NetworkID": "b6fbe659163bbccd7ffdace6cfe009584c698941994079fe9f9b3a34d360839c",
+                        "EndpointID": "cbfee38857162451d749c7772167ac9d01c9fb844b76211aa41c0b239b384472",
                         "Gateway": "172.17.0.1",
                         "IPAddress": "172.17.0.3",
                         "IPPrefixLen": 16,
                         "IPv6Gateway": "",
                         "GlobalIPv6Address": "",
                         "GlobalIPv6PrefixLen": 0,
-                        "MacAddress": "02:42:ac:11:00:03",
-                        "DriverOpts": null
+                        "DNSNames": null
                     }
                 }
             }
@@ -531,8 +499,5 @@ docker container inspect -f '{{.NetworkSettings.IPAddress}}' nginx
 ```
 
 ```
-172.17.0.2
+172.17.0.3
 ```
-
-
-
