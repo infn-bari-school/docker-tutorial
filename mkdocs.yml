@@ -67,8 +67,8 @@ nav:
     - Use your own runner from a dedicated VM: 'image/automation/runner.md'
     - How to use Github actions to build your image automatically: 'image/automation/ghaction.md'
   - Multi-container applications with Docker Compose:
-    - Introduction: 'compose/intro.md'
-    - Docker compose: 'compose/howto.md'
+    - Concepts: 'compose/concepts.md'
+    - Hands-on: 'compose/hands-on.md'
 
  
-copyright: Copyright &copy; 2022 INFN
+copyright: Copyright &copy; 2024 INFN
