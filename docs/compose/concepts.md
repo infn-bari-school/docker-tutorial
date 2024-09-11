@@ -422,11 +422,16 @@ The default value should be placed after the `:-` characters.
 
 Since more approaches are supported, Docker compose uses the following priority order, overwriting the less important with the higher ones:
 
-When multiple approches are used, Docker compose prioritizes configuration as follows, with high-priorit values overriding lower-priority ones:
+When multiple approaches are used, Docker compose prioritizes configuration as follows, with high-priority values overriding lower-priority ones:
+
 1. Compose ﬁle (highest important)
+
 2. Shell environment variables
+
 3. Environment ﬁle
+
 4. Dockerﬁle
+
 5. Undefined variables (lowest important)
 
 #### Health checks
