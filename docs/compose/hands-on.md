@@ -1,7 +1,7 @@
 
 ### Hands-on 1
 
-Write the docker-compose.yml file for the following Docker CLI inserting the `depends_on` condition on db health check
+Write the compose.yaml file for the following Docker CLI inserting the `depends_on` condition on db health check
 
 === "Exercise details"
     ```bash
@@ -14,7 +14,7 @@ Write the docker-compose.yml file for the following Docker CLI inserting the `de
       -e MYSQL_ROOT_PASSWORD=somewordpress \
       -e MYSQL_USER=wordpress_user \
       -e MYSQL_PASSWORD=wordpress_password \
-      -e MYSQL_DATABASE=wordpress_db \
+      -e MYSQL_DATABASE=wordpress_database \
       --restart always \
       --health-cmd="mysqladmin ping --silent" \
       --health-interval=10s \
@@ -43,31 +43,31 @@ Write the docker-compose.yml file for the following Docker CLI inserting the `de
         image: mariadb:10.6.4-focal
         volumes:
           - db_data:/var/lib/mysql
-        restart: always
         environment:
           - MYSQL_ROOT_PASSWORD=somewordpress
-          - MYSQL_DATABASE=wordpress_database
           - MYSQL_USER=wordpress_user
           - MYSQL_PASSWORD=wordpress_password
+          - MYSQL_DATABASE=wordpress_database
+        restart: always
         healthcheck:
-          test: ["CMD", "mysqladmin", "ping", "--silent"]
+          test: "mysqladmin ping --silent"
           interval: 10s
+          start_period: 10s
           timeout: 10s
           retries: 60
-          start_period: 10s
-    
-      wordpress:
+
+      wp:
         image: wordpress:latest
         volumes:
           - wp_data:/var/www/html
         ports:
-          - 8081:80
-        restart: always
+          - 8080:80
         environment:
           - WORDPRESS_DB_HOST=db
           - WORDPRESS_DB_USER=wordpress_user
           - WORDPRESS_DB_PASSWORD=wordpress_password
           - WORDPRESS_DB_NAME=wordpress_database
+        restart: always
         depends_on:
           db:
             condition: service_healthy
@@ -79,7 +79,7 @@ Write the docker-compose.yml file for the following Docker CLI inserting the `de
 
 ### Hands-on 2
 
-Write the docker-compose.yml file that builds the following Dockerfile and uses it
+Write the compose.yaml file that builds the following Dockerfile and uses it
 
 === "Exercise details"
     ```
@@ -92,10 +92,23 @@ Write the docker-compose.yml file that builds the following Dockerfile and uses 
                 --NotebookApp.token='' \
                 --NotebookApp.password=''
     ```
-=== "Solution"
+    Jupyter notebook to test the configuration
+
+    ```python
+    import pandas as pd
+    output_path = 'my_output.csv'
+
+    data = {
+        'apples': [3, 2, 0, 1], 
+        'oranges': [0, 3, 7, 2]
+    }
+    df = pd.DataFrame(data)
+
+    df.to_csv(output_path)
+    ```
+
+=== "Solution 1"
     ```bash
-    mkdir exercise2
-    cd exercise2
     cat > requirements.txt << EOF
     pandas
     numpy
@@ -114,6 +127,68 @@ Write the docker-compose.yml file that builds the following Dockerfile and uses 
         ports:
           - 8888:8888
         command: /opt/conda/bin/python3.11 /opt/conda/bin/jupyter-lab --no-browser --allow-root --NotebookApp.token='' --NotebookApp.password=''
+    EOF
+
+    # To execute the application run:
+    # docker compose up
+    ```
+=== "Solution 2"
+    ```bash
+    cat > requirements.txt << EOF
+    pandas
+    numpy
+    EOF
+
+    cat > Dockerfile << EOF
+    FROM jupyter/minimal-notebook
+    COPY requirements.txt /requirements.txt
+    RUN pip install -r /requirements.txt
+    EOF
+
+    cat > compose.yaml << EOF
+    services:
+      my_jupyter:
+        build: .
+        ports:
+          - 8888:8888
+        command: "/opt/conda/bin/python3.11 \
+                  /opt/conda/bin/jupyter-lab \
+                    --no-browser \
+                    --allow-root \
+                    --NotebookApp.token='' \
+                    --NotebookApp.password='' "
+    EOF
+
+    # To execute the application run:
+    # docker compose up
+    ```
+
+=== "Solution 3"
+    ```bash
+    cat > requirements.txt << EOF
+    pandas
+    numpy
+    EOF
+
+    cat > Dockerfile << EOF
+    FROM jupyter/minimal-notebook
+    COPY requirements.txt /requirements.txt
+    RUN pip install -r /requirements.txt
+    EOF
+
+    cat > compose.yaml << EOF
+    services:
+      my_jupyter:
+        build: .
+        ports:
+          - 8888:8888
+        command: 
+          - /opt/conda/bin/python3.11
+          - /opt/conda/bin/jupyter-lab
+          - --no-browser
+          - --allow-root
+          - --NotebookApp.token=''
+          - --NotebookApp.password=''
     EOF
 
     # To execute the application run:
