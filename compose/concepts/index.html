@@ -1,0 +1,2425 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="Marica Antonacci - marica.antonacci@ba.infn.it">
+      
+      
+      
+        <link rel="prev" href="../../image/automation/ghaction/">
+      
+      
+        <link rel="next" href="../hands-on/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.17">
+    
+    
+      
+        <title>Concepts - Docker Tutorial</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.bcfcd587.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="green">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#docker-compose-file" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Docker Tutorial" class="md-header__button md-logo" aria-label="Docker Tutorial" data-md-component="logo">
+      
+  <img src="../../assets/logo_infn.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Docker Tutorial
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Concepts
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/infn-bari-school/docker-tutorial" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Docker Tutorial" class="md-nav__button md-logo" aria-label="Docker Tutorial" data-md-component="logo">
+      
+  <img src="../../assets/logo_infn.png" alt="logo">
+
+    </a>
+    Docker Tutorial
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/infn-bari-school/docker-tutorial" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Intro
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            Intro
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../intro/install/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Install docker engine on Ubuntu
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../intro/info/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Docker info
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../intro/hello-world/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Run your first container
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../intro/images/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Where are Docker images stored?
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../intro/container/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Docker container lifecycle
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Docker Container manipulation
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Docker Container manipulation
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../container/manipulation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Work with your first container
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Going further
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Going further
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../container/example/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Run a dockerized service
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Environment variables
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Environment variables
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../container/env_vars/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    How to pass env variables to a container
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Persistent data
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Persistent data
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data/volumes/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Docker volumes and bind-mounts
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data/volume_summary/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Summary
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Container networking
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            Container networking
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../networking/networking/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Bridge mode and port mapping
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Health checks
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            Health checks
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../container/health_checks/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    How to add a health check to your docker container
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Docker web UI
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            Docker web UI
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../gui/portainer/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Portainer
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Building images
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            Building images
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../image/intro/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Building interactively
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_9_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_9_2" id="__nav_9_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Dockerfiles
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_9_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9_2">
+            <span class="md-nav__icon md-icon"></span>
+            Dockerfiles
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../image/dockerfile/instructions/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview of basic instructions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../image/dockerfile/first-dockerfile/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Write the first Dockerfile
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../image/dockerfile/cmd-entrypoint/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    The CMD and ENTRYPOINT verbs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../image/dockerfile/copy/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Copying files during the build
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../image/dockerfile/exercise/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Exercise
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_9_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_9_3" id="__nav_9_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Cache and dangling images
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_9_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9_3">
+            <span class="md-nav__icon md-icon"></span>
+            Cache and dangling images
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../image/cacheimages/cache-dangling/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    ... or what are those nasty <none> tags
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_9_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_9_4" id="__nav_9_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Docker Registry
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_9_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9_4">
+            <span class="md-nav__icon md-icon"></span>
+            Docker Registry
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../image/registry/dockerhub/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Publishing images to the Docker hub
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_9_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_9_5" id="__nav_9_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    multi-stage example
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_9_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9_5">
+            <span class="md-nav__icon md-icon"></span>
+            multi-stage example
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../image/multistage/multistage-example/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Our first multi-stage Dockerfile
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    CI/CD build automation
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            CI/CD build automation
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../image/automation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    How to use Gitlab CI/CD to build your image automatically
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../image/automation/runner/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Use your own runner from a dedicated VM
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../image/automation/ghaction/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    How to use Github actions to build your image automatically
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Multi-container applications with Docker Compose
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            Multi-container applications with Docker Compose
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Concepts
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Concepts
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#docker-compose-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      Docker compose file
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#docker-compose-cli" class="md-nav__link">
+    <span class="md-ellipsis">
+      Docker compose CLI
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Docker compose CLI">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#most-used-docker-compose-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      Most used docker compose commands
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#start-your-first-multi-container-application" class="md-nav__link">
+    <span class="md-ellipsis">
+      Start your first multi-container application
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stop-your-first-multi-container-application" class="md-nav__link">
+    <span class="md-ellipsis">
+      Stop your first multi-container application
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#project-name" class="md-nav__link">
+    <span class="md-ellipsis">
+      Project name
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#custom-network-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Custom Network configuration
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#write-your-first-docker-compose-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      Write your first docker compose file
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Write your first docker compose file">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#using-default-network-definition" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using default network definition
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#environment-variable-definition" class="md-nav__link">
+    <span class="md-ellipsis">
+      Environment variable definition
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Environment variable definition">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#further-comments" class="md-nav__link">
+    <span class="md-ellipsis">
+      Further comments
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#health-checks" class="md-nav__link">
+    <span class="md-ellipsis">
+      Health checks
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dependencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dependencies
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Dependencies">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#waiting-for-a-service-is-ready" class="md-nav__link">
+    <span class="md-ellipsis">
+      Waiting for a service is ready
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#profiles" class="md-nav__link">
+    <span class="md-ellipsis">
+      Profiles
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#build-dockerfile-and-run-a-multi-container-application" class="md-nav__link">
+    <span class="md-ellipsis">
+      Build Dockerfile and run a multi-container application
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Build Dockerfile and run a multi-container application">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#lets-start-the-application" class="md-nav__link">
+    <span class="md-ellipsis">
+      Let's start the application:
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hands-on/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Hands-on
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+  <h1>Concepts</h1>
+
+<p><strong>Docker Compose</strong> is a utility designed to define and execute multi-container Docker applications. It facilitates the management of interconnected containers as a unified entity</p>
+<h3 id="docker-compose-file">Docker compose file<a class="headerlink" href="#docker-compose-file" title="Permanent link">&para;</a></h3>
+<p>Docker uses a simple YAML file to describe multi-container application.</p>
+<p>This file is called a "docker-compose file"</p>
+<p>Following a simple example of a docker compose file:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">services</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">db</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">influxdb:2.7</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">db_data:/var/lib/influxdb2:rw</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;8086:8086&quot;</span>
+<span class="w">    </span><span class="nt">networks</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">db_net</span>
+
+<span class="nt">volumes</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">db_data</span><span class="p">:</span>
+
+<span class="nt">networks</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">db_net</span><span class="p">:</span>
+</code></pre></div>
+<p>In the YAML file you can notice an basic structure:</p>
+<ul>
+<li>the <strong>services</strong> keyword let you list all services of the application.</li>
+<li><strong>db</strong> is the arbitraty name of the service,  it can be anything you like as long as it's unique.</li>
+<li>inside each service, with the <strong>image</strong>, <strong>volumes</strong>, <strong>ports</strong> and <strong>networks</strong> keywords you can configure the execution of the service</li>
+<li>the <strong>volumes</strong> keyword allows to define volumes to be attach in the containers. </li>
+<li>the <strong>networks</strong> keyword allows to define networks to be used in the containers. </li>
+</ul>
+<h3 id="docker-compose-cli">Docker compose CLI<a class="headerlink" href="#docker-compose-cli" title="Permanent link">&para;</a></h3>
+<p>The Docker CLI lets you interact with your Docker Compose applications through the <code>docker compose</code> command, and its subcommands. </p>
+<p>Using the CLI, you can manage the lifecycle of your multi-container applications defined in the compose.yaml file.</p>
+<p>The CLI commands enable you to start, stop, and configure your applications effortlessly.</p>
+<ul>
+<li><strong>docker compose up</strong>: initializes and starts the application environment</li>
+<li><strong>docker compose start</strong>: starts the application environment</li>
+<li><strong>docker compose restart</strong>: restarts the already created application environment</li>
+<li><strong>docker compose stop</strong>: stops the application environment</li>
+<li><strong>docker compose down</strong>: stops and destroys the application environment</li>
+</ul>
+<h4 id="most-used-docker-compose-commands">Most used docker compose commands<a class="headerlink" href="#most-used-docker-compose-commands" title="Permanent link">&para;</a></h4>
+<ul>
+<li><code>docker compose up</code>: initializes, starts the application environment and shows logs without return to command line</li>
+<li><code>docker compose up -d</code>: initializes and starts the application environment in detacted mode</li>
+<li><code>docker compose ps</code>: lists the running containers/services</li>
+<li><code>docker compose down -v</code>: stops and destroys the application environment and volumes</li>
+<li><code>docker compose logs</code>: shows application logs</li>
+</ul>
+<h4 id="start-your-first-multi-container-application">Start your first multi-container application<a class="headerlink" href="#start-your-first-multi-container-application" title="Permanent link">&para;</a></h4>
+<p>Let's start a multi-container application. At this point it's not important the content of the docker compose file.</p>
+<p>Docker compose file:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">services</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">db</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">influxdb:2.7</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">db_data:/var/lib/influxdb2:rw</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;8086:8086&quot;</span>
+<span class="w">    </span><span class="nt">networks</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">db_net</span>
+
+<span class="nt">volumes</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">db_data</span><span class="p">:</span>
+
+<span class="nt">networks</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">db_net</span><span class="p">:</span>
+</code></pre></div>
+<p>Commands:</p>
+<div class="highlight"><pre><span></span><code>user@vm:~/prova_1$<span class="w"> </span>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d
+✔<span class="w"> </span>db<span class="w"> </span><span class="m">10</span><span class="w"> </span>layers<span class="w"> </span><span class="o">[</span>⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿<span class="o">]</span><span class="w">     </span>0B/0B<span class="w">   </span>Pulled<span class="w"> </span><span class="m">39</span>.4s<span class="w">                              </span>
+<span class="o">[</span>+<span class="o">]</span><span class="w"> </span>Running<span class="w"> </span><span class="m">3</span>/3
+✔<span class="w"> </span>Network<span class="w"> </span>prova_1_db_net<span class="w">    </span>Created<span class="w">                                                                                                                 </span>
+✔<span class="w"> </span>Volume<span class="w"> </span><span class="s2">&quot;prova_1_db_data&quot;</span><span class="w">  </span>Created<span class="w">                                                                                                                </span>
+✔<span class="w"> </span>Container<span class="w"> </span>prova_1-db-1<span class="w">    </span>Started<span class="w"> </span>
+
+user@vm:~/prova_1$<span class="w"> </span>docker<span class="w"> </span>container<span class="w"> </span>ps
+CONTAINERID<span class="w">   </span>IMAGE<span class="w">          </span>NAMES
+Be72e5..<span class="w">      </span>influxdb:2.7<span class="w">     </span>prova_1_db_1
+
+user@vm:~/prova_1$<span class="w"> </span>docker<span class="w"> </span>volume<span class="w"> </span>ls
+DRIVER<span class="w">  </span>VOLUME<span class="w"> </span>NAME
+<span class="nb">local</span><span class="w">   </span>46f4a..
+<span class="nb">local</span><span class="w">   </span>prova_1_db_data
+
+user@vm:~/prova_1$<span class="w"> </span>docker<span class="w"> </span>network<span class="w"> </span>ls
+NETWORK<span class="w"> </span>ID<span class="w">  </span>NAME<span class="w">              </span>DRIVER<span class="w">    </span>SCOPE
+51039c996454<span class="w">   </span>bridge<span class="w">             </span>bridge<span class="w">    </span><span class="nb">local</span>
+85ffa41af96f<span class="w">   </span>host<span class="w">               </span>host<span class="w">      </span><span class="nb">local</span>
+d6f329122060<span class="w">   </span>none<span class="w">               </span>null<span class="w">      </span><span class="nb">local</span>
+ec31eefd60d5<span class="w">   </span>prova_1_db_net<span class="w">   </span>bridge<span class="w">  </span><span class="nb">local</span>
+</code></pre></div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Every object name (image, volume and network) starts with <code>prova_1</code> that represents the folder name containing the docker compose file. </p>
+</div>
+<h4 id="stop-your-first-multi-container-application">Stop your first multi-container application<a class="headerlink" href="#stop-your-first-multi-container-application" title="Permanent link">&para;</a></h4>
+<p>Commands:</p>
+<div class="highlight"><pre><span></span><code>user@vm:~/prova_1$<span class="w"> </span>docker<span class="w"> </span>compose<span class="w"> </span>down
+<span class="o">[</span>+<span class="o">]</span><span class="w"> </span>Running<span class="w"> </span><span class="m">2</span>/2
+<span class="w"> </span>✔<span class="w"> </span>Container<span class="w"> </span>prova_1-db-1<span class="w">  </span>Removed<span class="w">                                                                                                                </span>
+<span class="w"> </span>✔<span class="w"> </span>Network<span class="w"> </span>prova_1_db_net<span class="w">  </span>Removed
+
+user@vm:~/prova_1$<span class="w"> </span>docker<span class="w"> </span>container<span class="w"> </span>ps
+CONTAINERID<span class="w">   </span>IMAGE<span class="w">          </span>STATUS<span class="w">          </span>NAMES
+
+user@vm:~/prova_1$<span class="w"> </span>docker<span class="w"> </span>volume<span class="w"> </span>ls
+DRIVER<span class="w">  </span>VOLUME<span class="w"> </span>NAME
+<span class="nb">local</span><span class="w">   </span>46f4..
+<span class="nb">local</span><span class="w">   </span>prova_1_db_data
+
+user@vm:~/prova_1$<span class="w"> </span>docker<span class="w"> </span>network<span class="w"> </span>ls
+NETWORK<span class="w"> </span>ID<span class="w">  </span>NAME<span class="w">    </span>DRIVER<span class="w">  </span>SCOPE
+51039c996454<span class="w">   </span>bridge<span class="w">   </span>bridge<span class="w">  </span><span class="nb">local</span>
+85ffa41af96f<span class="w">   </span>host<span class="w">     </span>host<span class="w">    </span><span class="nb">local</span>
+d6f329122060<span class="w">   </span>none<span class="w">     </span>null<span class="w">    </span><span class="nb">local</span>
+</code></pre></div>
+<p>Some comments:
+- Volumes are not removed with <code>docker compose down</code>
+- Compose preserves all volumes used by your services
+- Data inside volume is not lost and can be reused once the application is restarted
+- To remove volume as well, use <code>docker compose down --volumes</code> or <code>docker compose down -v</code></p>
+<h3 id="project-name">Project name<a class="headerlink" href="#project-name" title="Permanent link">&para;</a></h3>
+<p>Compose uses project names to isolate multi-container applications from each others.</p>
+<p>If not set, the folder name is taken as project name.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>A custom project name can be set using the <code>-p</code> command line option or the <code>COMPOSE_PROJECT_NAME</code> environment variable.</p>
+</div>
+<div class="highlight"><pre><span></span><code>user@vm:~$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>..
+user@vm:~$<span class="w"> </span>cp<span class="w"> </span>-r<span class="w"> </span>prova_1/<span class="w"> </span>prova_2/
+user@vm:~$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>prova_2
+
+user@vm:~/prova_2$<span class="w"> </span>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d
+<span class="o">[</span>+<span class="o">]</span><span class="w"> </span>Running<span class="w"> </span><span class="m">3</span>/3
+✔<span class="w"> </span>Network<span class="w"> </span>prova_2_db_net<span class="w">   </span>Created
+✔<span class="w"> </span>Volume<span class="w"> </span><span class="s2">&quot;prova_2_db_data&quot;</span><span class="w"> </span>Created
+✔<span class="w"> </span>Container<span class="w"> </span>prova_2-db-1<span class="w">   </span>Started
+
+user@vm:~/prova_2$<span class="w"> </span>docker<span class="w"> </span>ps
+CONTAINERID<span class="w">     </span>IMAGE<span class="w">           </span>NAMES
+297f44..<span class="w">        </span>influxdb:2.7<span class="w">    </span>prova_2_db_1
+
+user@vm:~/prova_2$<span class="w"> </span>docker<span class="w"> </span>compose<span class="w"> </span>down
+<span class="o">[</span>+<span class="o">]</span><span class="w"> </span>Running<span class="w"> </span><span class="m">2</span>/2
+✔<span class="w"> </span>Container<span class="w"> </span>prova_2-db-1<span class="w"> </span>Removed
+✔<span class="w"> </span>Network<span class="w"> </span>prova_2_db_net<span class="w"> </span>Removed
+</code></pre></div>
+<h3 id="custom-network-configuration">Custom Network configuration<a class="headerlink" href="#custom-network-configuration" title="Permanent link">&para;</a></h3>
+<p>By default Compose sets up a single network for your application.</p>
+<p>Each container joins the default network and is both <strong>reachable</strong> by other containers on that network and <strong>discoverable</strong> by them at a hostname identical to the container name.</p>
+<p>If you make a conﬁguration change to a service and run <code>docker compose up</code> to update it, the old container is removed and the new one joins the network under a different IP address but the same name. So it is suggested to use hostnames instead of IPs to connect services.</p>
+<p>You can specify your custom network with the top-level networks key. Following an example.</p>
+<div class="highlight"><pre><span></span><code><span class="nt">networks</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">front</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">driver</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bridge</span>
+<span class="w">    </span><span class="nt">driver_opts</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">com.docker.network.enable_ipv6</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;true&quot;</span>
+<span class="w">    </span><span class="nt">ipam</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">driver</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span>
+<span class="w">      </span><span class="nt">config</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">subnet</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">172.16.238.0/24</span>
+<span class="w">        </span><span class="nt">gateway</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">172.16.238.1</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">subnet</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2001:3984:3989::/64&quot;</span>
+<span class="w">        </span><span class="nt">gateway</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2001:3984:3989::1&quot;</span>
+</code></pre></div>
+<h3 id="write-your-first-docker-compose-file">Write your first docker compose file<a class="headerlink" href="#write-your-first-docker-compose-file" title="Permanent link">&para;</a></h3>
+<p>Let's learn how to write a docker compose file by converting an application described from command line instructions to the corresponding YAML format file.</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>volume<span class="w"> </span>create<span class="w"> </span>influxdb-storage
+<span class="nb">export</span><span class="w"> </span><span class="nv">INFLUXDB_USERNAME</span><span class="o">=</span>corsodocker2024
+<span class="nb">export</span><span class="w"> </span><span class="nv">INFLUXDB_PW</span><span class="o">=</span>corsodocker2024
+docker<span class="w"> </span>container<span class="w"> </span>run<span class="w"> </span>--name<span class="w"> </span>influxdb<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-p<span class="w"> </span><span class="m">8086</span>:8086<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-v<span class="w"> </span>influxdb-storage:/var/lib/influxdb<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-e<span class="w"> </span><span class="nv">DOCKER_INFLUXDB_INIT_MODE</span><span class="o">=</span>setup<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-e<span class="w"> </span><span class="nv">DOCKER_INFLUXDB_INIT_USERNAME</span><span class="o">=</span><span class="si">${</span><span class="nv">INFLUXDB_USERNAME</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-e<span class="w"> </span><span class="nv">DOCKER_INFLUXDB_INIT_PASSWORD</span><span class="o">=</span><span class="si">${</span><span class="nv">INFLUXDB_PW</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-e<span class="w"> </span><span class="nv">DOCKER_INFLUXDB_INIT_ORG</span><span class="o">=</span>INFN<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-e<span class="w"> </span><span class="nv">DOCKER_INFLUXDB_INIT_BUCKET</span><span class="o">=</span>INFN-BUCKET<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>influxdb:2.7
+
+docker<span class="w"> </span>volume<span class="w"> </span>create<span class="w"> </span>grafana-storage
+<span class="nb">export</span><span class="w"> </span><span class="nv">GRAFANA_USERNAME</span><span class="o">=</span>corsodocker2024
+<span class="nb">export</span><span class="w"> </span><span class="nv">GRAFANA_PW</span><span class="o">=</span>corsodocker2024
+docker<span class="w"> </span>container<span class="w"> </span>run<span class="w"> </span>--name<span class="w"> </span>grafana<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-p<span class="w"> </span><span class="m">3000</span>:3000<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-v<span class="w"> </span>grafana-storage:/var/lib/grafana<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-e<span class="w"> </span><span class="nv">GF_SECURITY_ADMIN_USER</span><span class="o">=</span><span class="si">${</span><span class="nv">GRAFANA_USERNAME</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-e<span class="w"> </span><span class="nv">GF_SECURITY_ADMIN_PASSWORD</span><span class="o">=</span><span class="si">${</span><span class="nv">GRAFANA_PW</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>grafana/grafana:11.2.0-ubuntu
+</code></pre></div>
+<p>The resulting YAML file is:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">services</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">influxdb</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">influxdb:2.7</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;8086:8086&#39;</span>
+<span class="w">    </span><span class="nt">networks</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_net</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">influxdb-storage:/var/lib/influxdb</span>
+<span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DOCKER_INFLUXDB_INIT_MODE=setup</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DOCKER_INFLUXDB_INIT_USERNAME=${INFLUXDB_USERNAME}</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DOCKER_INFLUXDB_INIT_PASSWORD=${INFLUXDB_PW}</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DOCKER_INFLUXDB_INIT_ORG=INFN</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DOCKER_INFLUXDB_INIT_BUCKET=INFN-BUCKET</span>
+
+<span class="w">  </span><span class="nt">grafana</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">grafana/grafana:11.2.0-ubuntu</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;3000:3000&#39;</span>
+<span class="w">    </span><span class="nt">networks</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my_net</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">grafana-storage:/var/lib/grafana</span>
+<span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">GF_SECURITY_ADMIN_USER=${GRAFANA_USERNAME}</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PW}</span><span class="w"> </span>
+
+<span class="nt">volumes</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">influxdb-storage</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span>
+<span class="w">  </span><span class="nt">grafana-storage</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span>
+
+<span class="nt">networks</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">my_net</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span>
+</code></pre></div>
+<p>As you can see, there is a one-to-one correspondence between information in the command line instructions and the docker compose file.</p>
+<h4 id="using-default-network-definition">Using default network definition<a class="headerlink" href="#using-default-network-definition" title="Permanent link">&para;</a></h4>
+<p>Docker Compose creates a default network if not present any network definitions in the docker compose file. In such a case, the section <code>networks</code> inside each application should be avoided as well. In this second scenario, the YAML file become: </p>
+<div class="highlight"><pre><span></span><code><span class="nt">services</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">influxdb</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">influxdb:2.7</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;8086:8086&#39;</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">influxdb-storage:/var/lib/influxdb</span>
+<span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DOCKER_INFLUXDB_INIT_MODE=setup</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DOCKER_INFLUXDB_INIT_USERNAME=${INFLUXDB_USERNAME}</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DOCKER_INFLUXDB_INIT_PASSWORD=${INFLUXDB_PW}</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DOCKER_INFLUXDB_INIT_ORG=INFN</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DOCKER_INFLUXDB_INIT_BUCKET=INFN-BUCKET</span>
+<span class="w">  </span><span class="nt">grafana</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">grafana/grafana:11.2.0-ubuntu</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;3000:3000&#39;</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">grafana-storage:/var/lib/grafana</span>
+<span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">GF_SECURITY_ADMIN_USER=${GRAFANA_USERNAME}</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PW}</span><span class="w"> </span>
+
+<span class="nt">volumes</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">influxdb-storage</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span>
+<span class="w">  </span><span class="nt">grafana-storage</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span>
+</code></pre></div>
+<h4 id="environment-variable-definition">Environment variable definition<a class="headerlink" href="#environment-variable-definition" title="Permanent link">&para;</a></h4>
+<p>As you can see from the docker compose file above, the environment variable values are inserted directly inside the YAML file. This could be unacceplable in some cases.</p>
+<p>A second approach allows to link existed environment variables by inserting their names inside the docker compose file.</p>
+<div class="highlight"><pre><span></span><code><span class="nt">services</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">influxdb</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">influxdb:2.7</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;8086:8086&#39;</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">influxdb-storage:/var/lib/influxdb</span>
+<span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DOCKER_INFLUXDB_INIT_MODE=setup</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DOCKER_INFLUXDB_INIT_USERNAME=${INFLUXDB_USERNAME}</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DOCKER_INFLUXDB_INIT_PASSWORD=${INFLUXDB_PW}</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DOCKER_INFLUXDB_INIT_ORG=INFN</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DOCKER_INFLUXDB_INIT_BUCKET=INFN-BUCKET</span>
+
+<span class="w">  </span><span class="nt">grafana</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">grafana/grafana:11.2.0-ubuntu</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;3000:3000&#39;</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">grafana-storage:/var/lib/grafana</span>
+<span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">GF_SECURITY_ADMIN_USER=${GRAFANA_USERNAME}</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PW}</span>
+
+<span class="nt">volumes</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">influxdb-storage</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span>
+<span class="w">  </span><span class="nt">grafana-storage</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span>
+</code></pre></div>
+<p>The above multi-container application can be started with the following commands:</p>
+<div class="highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">INFLUXDB_USERNAME</span><span class="o">=</span>corsodocker2024
+<span class="nb">export</span><span class="w"> </span><span class="nv">INFLUXDB_PW</span><span class="o">=</span>corsodocker2024
+<span class="nb">export</span><span class="w"> </span><span class="nv">GRAFANA_USERNAME</span><span class="o">=</span>admin
+<span class="nb">export</span><span class="w"> </span><span class="nv">GRAFANA_PW</span><span class="o">=</span>admin
+docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>
+</code></pre></div>
+<p>Or write a further file containing all environment variables. This file must be named <code>.env</code>. </p>
+<div class="highlight"><pre><span></span><code>user@vm:~/example$<span class="w"> </span>cat<span class="w"> </span>.env
+<span class="nv">INFLUXDB_USERNAME</span><span class="o">=</span>corsodocker2024
+<span class="nv">INFLUXDB_PW</span><span class="o">=</span>corsodocker2024
+<span class="nv">GRAFANA_USERNAME</span><span class="o">=</span>corsodocker2024
+<span class="nv">GRAFANA_PW</span><span class="o">=</span>corsodocker2024
+</code></pre></div>
+<p>Docker checks if in the directory is present a <code>.env</code> file. In a such a case, it will import the environment variables when the multi-container application is started.</p>
+<p>A third approach involves defining an environment variable file per service and inserting its name within the service definition, as show below.</p>
+<p>Environment variable files' content:</p>
+<div class="highlight"><pre><span></span><code>user@vm:~/example$<span class="w"> </span>cat<span class="w"> </span>influxdb.env
+<span class="nv">DOCKER_INFLUXDB_INIT_MODE</span><span class="o">=</span>setup
+<span class="nv">DOCKER_INFLUXDB_INIT_USERNAME</span><span class="o">=</span>corsodocker2024
+<span class="nv">DOCKER_INFLUXDB_INIT_PASSWORD</span><span class="o">=</span>corsodocker2024
+<span class="nv">DOCKER_INFLUXDB_INIT_ORG</span><span class="o">=</span>INFN
+<span class="nv">DOCKER_INFLUXDB_INIT_BUCKET</span><span class="o">=</span>INFN-BUCKET
+
+user@vm:~/example$<span class="w"> </span>cat<span class="w"> </span>grafana.env
+<span class="nv">GF_SECURITY_ADMIN_USER</span><span class="o">=</span>corsodocker2024
+<span class="nv">GF_SECURITY_ADMIN_PASSWORD</span><span class="o">=</span>corsodocker2024
+</code></pre></div>
+<p>Docker compose file:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">services</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">influxdb</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">influxdb:2.7</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;8086:8086&#39;</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">influxdb-storage:/var/lib/influxdb</span>
+<span class="w">    </span><span class="nt">env_file</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">influxdb.env</span>
+
+<span class="w">  </span><span class="nt">grafana</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">grafana/grafana:11.2.0-ubuntu</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;3000:3000&#39;</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">grafana-storage:/var/lib/grafana</span>
+<span class="w">    </span><span class="nt">env_file</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">grafana.env</span>
+
+<span class="nt">volumes</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">influxdb-storage</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span>
+<span class="w">  </span><span class="nt">grafana-storage</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span>
+</code></pre></div>
+<h5 id="further-comments">Further comments<a class="headerlink" href="#further-comments" title="Permanent link">&para;</a></h5>
+<p>Environment variables offer a flexible way to customize your application. For example, you can use them to specify the image version of a service:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">service</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">influxdb</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">influxdb:{$INFLUX_VERSION}</span>
+</code></pre></div>
+<p>Default values are allowed:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">service</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">influxdb</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">influxdb:{$INFLUX_VERSION:-2.7}</span>
+</code></pre></div>
+<p>The default value should be placed after the <code>:-</code> characters.</p>
+<p>Since more approaches are supported, Docker compose uses the following priority order, overwriting the less important with the higher ones:</p>
+<p>When multiple approaches are used, Docker compose prioritizes configuration as follows, with high-priority values overriding lower-priority ones:</p>
+<ol>
+<li>
+<p>Compose ﬁle (highest important)</p>
+</li>
+<li>
+<p>Shell environment variables</p>
+</li>
+<li>
+<p>Environment ﬁle</p>
+</li>
+<li>
+<p>Dockerﬁle</p>
+</li>
+<li>
+<p>Undefined variables (lowest important)</p>
+</li>
+</ol>
+<h4 id="health-checks">Health checks<a class="headerlink" href="#health-checks" title="Permanent link">&para;</a></h4>
+<p>Similar to the command-line interface, you can specify health checks for services within a Docker Compose file, as demonstrated below.</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>volume<span class="w"> </span>create<span class="w"> </span>influxdb-storage
+<span class="nb">export</span><span class="w"> </span><span class="nv">INFLUXDB_USERNAME</span><span class="o">=</span>admin
+<span class="nb">export</span><span class="w"> </span><span class="nv">INFLUXDB_PW</span><span class="o">=</span>admin
+docker<span class="w"> </span>container<span class="w"> </span>run<span class="w"> </span>--name<span class="w"> </span>influxdb<span class="w"> </span>
+<span class="w">           </span>-p<span class="w"> </span><span class="m">8086</span>:8086<span class="w"> </span><span class="se">\ </span>
+<span class="w">           </span>-v<span class="w"> </span>influxdb-storage:/var/lib/influxdb<span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>-e<span class="w"> </span><span class="nv">DOCKER_INFLUXDB_INIT_MODE</span><span class="o">=</span>setup<span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>-e<span class="w"> </span><span class="nv">DOCKER_INFLUXDB_INIT_USERNAME</span><span class="o">=</span><span class="si">${</span><span class="nv">INFLUXDB_USERNAME</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>-e<span class="w"> </span><span class="nv">DOCKER_INFLUXDB_INIT_PASSWORD</span><span class="o">=</span><span class="si">${</span><span class="nv">INFLUXDB_PW</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>-e<span class="w"> </span><span class="nv">DOCKER_INFLUXDB_INIT_ORG</span><span class="o">=</span>INFN<span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>-e<span class="w"> </span><span class="nv">DOCKER_INFLUXDB_INIT_BUCKET</span><span class="o">=</span>INFN-BUCKET<span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--health-cmd<span class="o">=</span><span class="s1">&#39;curl -f http://localhost:8086||exit 1&#39;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--health-start-period<span class="o">=</span>30s<span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--health-interval<span class="o">=</span><span class="w"> </span>30s<span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--health-timeout<span class="o">=</span>10s<span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>--health-retries<span class="o">=</span><span class="m">4</span><span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>influxdb:2.7
+</code></pre></div>
+<p>Docker compose file:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">services</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">influxdb</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">influxdb:2.7</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;8086:8086&#39;</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">influxdb-storage:/var/lib/influxdb</span>
+<span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DOCKER_INFLUXDB_INIT_MODE=setup</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DOCKER_INFLUXDB_INIT_USERNAME=${INFLUXDB_USERNAME}</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DOCKER_INFLUXDB_INIT_PASSWORD=${INFLUXDB_PW}</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DOCKER_INFLUXDB_INIT_ORG=INFN</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DOCKER_INFLUXDB_INIT_BUCKET=INFN-BUCKET</span>
+<span class="w">    </span><span class="nt">healthcheck</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">test</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;curl</span><span class="nv"> </span><span class="s">--fail</span><span class="nv"> </span><span class="s">http://localhost:8086</span><span class="nv"> </span><span class="s">||</span><span class="nv"> </span><span class="s">exit</span><span class="nv"> </span><span class="s">1&quot;</span>
+<span class="w">      </span><span class="nt">start_period</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30s</span>
+<span class="w">      </span><span class="nt">interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30s</span>
+<span class="w">      </span><span class="nt">timeout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10s</span>
+<span class="w">      </span><span class="nt">retries</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+</code></pre></div>
+<h3 id="dependencies">Dependencies<a class="headerlink" href="#dependencies" title="Permanent link">&para;</a></h3>
+<p>Applications often have dependencies between services, requiring some to start before others. </p>
+<p>Docker Compose uses the <code>depends_on</code> keyword to define these dependencies. </p>
+<p>For instance, we can configure Grafana to start only after InfluxDB is running.</p>
+<p>The Docker Compose file becomes:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">services</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">influxdb</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">influxdb:2.7</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;8086:8086&#39;</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">influxdb-storage:/var/lib/influxdb</span>
+<span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DOCKER_INFLUXDB_INIT_MODE=setup</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DOCKER_INFLUXDB_INIT_USERNAME=${INFLUXDB_USERNAME}</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DOCKER_INFLUXDB_INIT_PASSWORD=${INFLUXDB_PW}</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DOCKER_INFLUXDB_INIT_ORG=INFN</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DOCKER_INFLUXDB_INIT_BUCKET=INFN-BUCKET</span>
+
+<span class="w">  </span><span class="nt">grafana</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">grafana/grafana:11.2.0-ubuntu</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;3000:3000&#39;</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">grafana-storage:/var/lib/grafana</span>
+<span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">GF_SECURITY_ADMIN_USER=${GRAFANA_USERNAME}</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}</span>
+<span class="w">    </span><span class="nt">depends_on</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">influxdb</span>
+
+<span class="nt">volumes</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">influxdb-storage</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">grafana-storage</span><span class="p">:</span>
+</code></pre></div>
+<h4 id="waiting-for-a-service-is-ready">Waiting for a service is ready<a class="headerlink" href="#waiting-for-a-service-is-ready" title="Permanent link">&para;</a></h4>
+<p>Certain applications require tools to be fully functional, not just running. Health checks can determine when a tool is ready for use.</p>
+<p>The Docker compose file becomes:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">services</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">influxdb</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">influxdb:2.7</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;8086:8086&#39;</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">influxdb-storage:/var/lib/influxdb</span>
+<span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DOCKER_INFLUXDB_INIT_MODE=setup</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DOCKER_INFLUXDB_INIT_USERNAME=${INFLUXDB_USERNAME}</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DOCKER_INFLUXDB_INIT_PASSWORD=${INFLUXDB_PW}</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DOCKER_INFLUXDB_INIT_ORG=INFN</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DOCKER_INFLUXDB_INIT_BUCKET=INFN-BUCKET</span>
+<span class="w">    </span><span class="nt">healthcheck</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">test</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;curl</span><span class="nv"> </span><span class="s">--fail</span><span class="nv"> </span><span class="s">http://localhost:8086</span><span class="nv"> </span><span class="s">||</span><span class="nv"> </span><span class="s">exit</span><span class="nv"> </span><span class="s">1&quot;</span>
+<span class="w">      </span><span class="nt">start_period</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30s</span>
+<span class="w">      </span><span class="nt">interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30s</span>
+<span class="w">      </span><span class="nt">timeout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10s</span>
+<span class="w">      </span><span class="nt">retries</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+
+<span class="w">  </span><span class="nt">grafana</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">grafana/grafana:11.2.0-ubuntu</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">...</span><span class="w"> </span>
+<span class="w">    </span><span class="nt">depends_on</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">influxdb</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">condition</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">service_healthy</span>
+</code></pre></div>
+<h3 id="profiles">Profiles<a class="headerlink" href="#profiles" title="Permanent link">&para;</a></h3>
+<p>Profiles in Docker Compose offer a way to tailor your application for different scenarios by selectively activating or deactivating services. </p>
+<p>You can assign services to zero or more profiles. </p>
+<p>Unassigned services always start, while assigned ones start only when their corresponding profile is active.</p>
+<p>Let's considering the following Docker compose file</p>
+<div class="highlight"><pre><span></span><code><span class="nt">services</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">frontend</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">frontend</span>
+<span class="w">    </span><span class="nt">profiles</span><span class="p">:</span><span class="w"> </span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">frontend</span>
+
+<span class="w">  </span><span class="nt">phpmyadmin</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">phpmyadmin</span>
+<span class="w">    </span><span class="nt">depends_on</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">db</span>
+<span class="w">    </span><span class="nt">profiles</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">debug</span>
+
+<span class="w">  </span><span class="nt">backend</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">backend</span>
+
+<span class="w">  </span><span class="nt">db</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mysql</span>
+</code></pre></div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<ul>
+<li>the <code>db</code> service is always started since it does not contain the <code>profile</code> keyword</li>
+<li>the <code>phpmyadmin</code> service is started only when the <code>debug</code> profile is enabled</li>
+<li>the <code>frontend</code> service is started only when the <code>frontend</code> profile is enabled</li>
+</ul>
+</div>
+<p>Examples:</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w">                                     </span><span class="c1"># Only the db service is started</span>
+docker<span class="w"> </span>compose<span class="w"> </span>--profile<span class="w"> </span>frontend<span class="w"> </span>up<span class="w">                  </span><span class="c1"># Only the db and frontend services are started</span>
+<span class="nv">COMPOSE_PROFILES</span><span class="o">=</span>frontend<span class="w"> </span>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w">           </span><span class="c1"># Other syntax for the above command</span>
+
+docker<span class="w"> </span>compose<span class="w"> </span>--profile<span class="w"> </span>frontend<span class="w"> </span>--profile<span class="w"> </span>debug<span class="w"> </span>up<span class="w">  </span><span class="c1"># All services are started</span>
+<span class="nv">COMPOSE_PROFILES</span><span class="o">=</span>frontend,debug<span class="w"> </span>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w">     </span><span class="c1"># Other syntax for the above command</span>
+</code></pre></div>
+<h3 id="build-dockerfile-and-run-a-multi-container-application">Build Dockerfile and run a multi-container application<a class="headerlink" href="#build-dockerfile-and-run-a-multi-container-application" title="Permanent link">&para;</a></h3>
+<p>Within the image section of each service, Docker Compose defines the image used. </p>
+<p>You can specify a custom image built at runtime using a Dockerfile. </p>
+<p>Replace the <code>image</code> keyword with <code>build</code> for such services. </p>
+<p>Here's an example of a single-service application using a custom <code>python:3</code> image.</p>
+<p>Folder content:</p>
+<div class="highlight"><pre><span></span><code>user@vm:~/prova_4$<span class="w"> </span>ls<span class="w"> </span>-l
+Dockerfile
+requirements
+docker-compose.yml
+my-script.py
+</code></pre></div>
+<p>Dockerfile file content:</p>
+<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">python:3</span>
+
+<span class="k">COPY</span><span class="w"> </span>requirements<span class="w"> </span>/requirements
+<span class="k">RUN</span><span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements
+<span class="k">COPY</span><span class="w"> </span>my-script.py<span class="w"> </span>/my-script.py
+
+<span class="k">CMD</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">&quot;python3&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;/my-script.py&quot;</span><span class="p">]</span>
+</code></pre></div>
+<p>Requirements file content:</p>
+<div class="highlight"><pre><span></span><code>pandas
+numpy
+</code></pre></div>
+<p>my-script file content: </p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">socket</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">sleep</span>
+<span class="n">sock</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">)</span>
+<span class="n">server_address</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;localhost&#39;</span><span class="p">,</span> <span class="mi">1234</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;starting up on </span><span class="si">{</span><span class="n">server_address</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1"> port </span><span class="si">{</span><span class="n">server_address</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">sock</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="n">server_address</span><span class="p">)</span>
+<span class="n">sleep</span><span class="p">(</span><span class="mi">60</span><span class="p">)</span>
+</code></pre></div>
+<p>Docker compose file content:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">services</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">my_service</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">build</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">.</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;1234:1234&#39;</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dir_data:/data</span>
+</code></pre></div>
+<h4 id="lets-start-the-application">Let's start the application:<a class="headerlink" href="#lets-start-the-application" title="Permanent link">&para;</a></h4>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<ul>
+<li>using the  <code>--build</code> option forces Docker to rebuild the image</li>
+</ul>
+</div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Command</label><label for="__tabbed_1_2">Output</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>--build
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>Creating<span class="w"> </span>network<span class="w"> </span><span class="s2">&quot;prova_4_default&quot;</span><span class="w"> </span>with<span class="w"> </span>the<span class="w"> </span>default<span class="w"> </span>driver
+Building<span class="w"> </span>my_service
+Sending<span class="w"> </span>build<span class="w"> </span>context<span class="w"> </span>to<span class="w"> </span>Docker<span class="w"> </span>daemon<span class="w">   </span><span class="m">5</span>.12kB
+Step<span class="w"> </span><span class="m">1</span>/4<span class="w"> </span>:<span class="w"> </span>FROM<span class="w"> </span>python:3
+---&gt;<span class="w"> </span>de529ffbdb66
+Step<span class="w"> </span><span class="m">2</span>/4<span class="w"> </span>:<span class="w"> </span>COPY<span class="w"> </span>requirements<span class="w"> </span>./
+---&gt;<span class="w"> </span>8f6840fe4dab
+Step<span class="w"> </span><span class="m">3</span>/4<span class="w"> </span>:<span class="w"> </span>RUN<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--no-cache-dir<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+---&gt;<span class="w"> </span>Running<span class="w"> </span><span class="k">in</span><span class="w"> </span>363ffa40779c
+Collecting<span class="w"> </span>pandas
+Downloading<span class="w"> </span>pandas-1.4.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl<span class="w"> </span><span class="o">(</span><span class="m">11</span>.7<span class="w"> </span>MB<span class="o">)</span>
+Collecting<span class="w"> </span>numpy
+Downloading<span class="w"> </span>numpy-1.22.2-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl<span class="w"> </span><span class="o">(</span><span class="m">16</span>.8<span class="w"> </span>MB<span class="o">)</span>
+Collecting<span class="w"> </span>python-dateutil&gt;<span class="o">=</span><span class="m">2</span>.8.1
+Downloading<span class="w"> </span>python_dateutil-2.8.2-py2.py3-none-any.whl<span class="w"> </span><span class="o">(</span><span class="m">247</span><span class="w"> </span>kB<span class="o">)</span>
+Collecting<span class="w"> </span>pytz&gt;<span class="o">=</span><span class="m">2020</span>.1
+Downloading<span class="w"> </span>pytz-2021.3-py2.py3-none-any.whl<span class="w"> </span><span class="o">(</span><span class="m">503</span><span class="w"> </span>kB<span class="o">)</span>
+Collecting<span class="w"> </span>six&gt;<span class="o">=</span><span class="m">1</span>.5
+Downloading<span class="w"> </span>six-1.16.0-py2.py3-none-any.whl<span class="w"> </span><span class="o">(</span><span class="m">11</span><span class="w"> </span>kB<span class="o">)</span>
+Installing<span class="w"> </span>collected<span class="w"> </span>packages:<span class="w"> </span>six,<span class="w"> </span>pytz,<span class="w"> </span>python-dateutil,<span class="w"> </span>numpy,<span class="w"> </span>pandas
+Successfully<span class="w"> </span>installed<span class="w"> </span>numpy-1.22.2<span class="w"> </span>pandas-1.4.0<span class="w"> </span>python-dateutil-2.8.2<span class="w"> </span>pytz-2021.3<span class="w"> </span>six-1.16.0
+Removing<span class="w"> </span>intermediate<span class="w"> </span>container<span class="w"> </span>363ffa40779c
+---&gt;<span class="w"> </span>79f0ed627dd6
+Step<span class="w"> </span><span class="m">4</span>/4<span class="w"> </span>:<span class="w"> </span>CMD<span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;python3&quot;</span>,<span class="w"> </span><span class="s2">&quot;/my-script.py&quot;</span><span class="w"> </span><span class="o">]</span>
+---&gt;<span class="w"> </span>Running<span class="w"> </span><span class="k">in</span><span class="w"> </span>4f45fc08e6df
+Removing<span class="w"> </span>intermediate<span class="w"> </span>container<span class="w"> </span>4f45fc08e6df
+---&gt;<span class="w"> </span>4fd169b43c5f
+Successfully<span class="w"> </span>built<span class="w"> </span>4fd169b43c5f
+Successfully<span class="w"> </span>tagged<span class="w"> </span>prova_4_my_service:latest
+Creating<span class="w"> </span>prova_4_my_service_1<span class="w"> </span>...<span class="w"> </span><span class="k">done</span>
+</code></pre></div>
+</div>
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2024 INFN
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "toc.integrate", "content.code.copy"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.1e8ae164.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,2213 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="Marica Antonacci - marica.antonacci@ba.infn.it">
+      
+      
+      
+        <link rel="prev" href="../manipulation/">
+      
+      
+        <link rel="next" href="../env_vars/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.17">
+    
+    
+      
+        <title>Run a dockerized service - Docker Tutorial</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.bcfcd587.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="green">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#run-a-basic-http-server-in-a-docker-container" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Docker Tutorial" class="md-header__button md-logo" aria-label="Docker Tutorial" data-md-component="logo">
+      
+  <img src="../../assets/logo_infn.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Docker Tutorial
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Run a dockerized service
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/infn-bari-school/docker-tutorial" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Docker Tutorial" class="md-nav__button md-logo" aria-label="Docker Tutorial" data-md-component="logo">
+      
+  <img src="../../assets/logo_infn.png" alt="logo">
+
+    </a>
+    Docker Tutorial
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/infn-bari-school/docker-tutorial" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Intro
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            Intro
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../intro/install/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Install docker engine on Ubuntu
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../intro/info/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Docker info
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../intro/hello-world/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Run your first container
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../intro/images/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Where are Docker images stored?
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../intro/container/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Docker container lifecycle
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Docker Container manipulation
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Docker Container manipulation
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../manipulation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Work with your first container
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Going further
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Going further
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Run a dockerized service
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Run a dockerized service
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#run-a-basic-http-server-in-a-docker-container" class="md-nav__link">
+    <span class="md-ellipsis">
+      Run a basic http server in a docker container
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#creating-a-daemonized-container" class="md-nav__link">
+    <span class="md-ellipsis">
+      Creating a daemonized container
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#getting-the-container-log" class="md-nav__link">
+    <span class="md-ellipsis">
+      Getting the container log
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inspecting-the-container-processes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Inspecting the container processes
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#finding-out-more-about-our-container" class="md-nav__link">
+    <span class="md-ellipsis">
+      Finding out more about our container
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Environment variables
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Environment variables
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../env_vars/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    How to pass env variables to a container
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Persistent data
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Persistent data
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data/volumes/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Docker volumes and bind-mounts
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data/volume_summary/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Summary
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Container networking
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            Container networking
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../networking/networking/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Bridge mode and port mapping
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Health checks
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            Health checks
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../health_checks/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    How to add a health check to your docker container
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Docker web UI
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            Docker web UI
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../gui/portainer/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Portainer
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Building images
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            Building images
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../image/intro/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Building interactively
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_9_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_9_2" id="__nav_9_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Dockerfiles
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_9_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9_2">
+            <span class="md-nav__icon md-icon"></span>
+            Dockerfiles
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../image/dockerfile/instructions/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview of basic instructions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../image/dockerfile/first-dockerfile/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Write the first Dockerfile
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../image/dockerfile/cmd-entrypoint/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    The CMD and ENTRYPOINT verbs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../image/dockerfile/copy/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Copying files during the build
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../image/dockerfile/exercise/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Exercise
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_9_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_9_3" id="__nav_9_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Cache and dangling images
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_9_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9_3">
+            <span class="md-nav__icon md-icon"></span>
+            Cache and dangling images
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../image/cacheimages/cache-dangling/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    ... or what are those nasty <none> tags
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_9_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_9_4" id="__nav_9_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Docker Registry
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_9_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9_4">
+            <span class="md-nav__icon md-icon"></span>
+            Docker Registry
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../image/registry/dockerhub/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Publishing images to the Docker hub
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_9_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_9_5" id="__nav_9_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    multi-stage example
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_9_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9_5">
+            <span class="md-nav__icon md-icon"></span>
+            multi-stage example
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../image/multistage/multistage-example/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Our first multi-stage Dockerfile
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    CI/CD build automation
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            CI/CD build automation
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../image/automation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    How to use Gitlab CI/CD to build your image automatically
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../image/automation/runner/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Use your own runner from a dedicated VM
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../image/automation/ghaction/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    How to use Github actions to build your image automatically
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Multi-container applications with Docker Compose
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            Multi-container applications with Docker Compose
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../compose/concepts/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Concepts
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../compose/hands-on/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Hands-on
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+  <h1>Run a dockerized service</h1>
+
+<h3 id="run-a-basic-http-server-in-a-docker-container">Run a basic http server in a docker container<a class="headerlink" href="#run-a-basic-http-server-in-a-docker-container" title="Permanent link">&para;</a></h3>
+<p>Let's deploy a simple web server using <a href="https://www.nginx.com/" target="_blank"><code>nginx</code></a>.
+First of all, let's search on Docker Hub for an already available image.</p>
+<p>We can use the <code>search</code> command as follows:</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>search<span class="w"> </span>nginx
+</code></pre></div>
+<p>You will get something like the following output:</p>
+<div class="highlight"><pre><span></span><code>NAME<span class="w">                              </span>DESCRIPTION<span class="w">                                     </span>STARS<span class="w">     </span>OFFICIAL
+nginx<span class="w">                             </span>Official<span class="w"> </span>build<span class="w"> </span>of<span class="w"> </span>Nginx.<span class="w">                        </span><span class="m">20157</span><span class="w">     </span><span class="o">[</span>OK<span class="o">]</span>
+nginx/nginx-quic-qns<span class="w">              </span>NGINX<span class="w"> </span>QUIC<span class="w"> </span>interop<span class="w">                              </span><span class="m">1</span>
+nginx/nginx-ingress<span class="w">               </span>NGINX<span class="w"> </span>and<span class="w">  </span>NGINX<span class="w"> </span>Plus<span class="w"> </span>Ingress<span class="w"> </span>Controllers<span class="w"> </span>fo…<span class="w">   </span><span class="m">94</span>
+nginx/nginx-ingress-operator<span class="w">      </span>NGINX<span class="w"> </span>Ingress<span class="w"> </span>Operator<span class="w"> </span><span class="k">for</span><span class="w"> </span>NGINX<span class="w"> </span>and<span class="w"> </span>NGINX<span class="w"> </span>P…<span class="w">   </span><span class="m">2</span>
+nginx/nginx-prometheus-exporter<span class="w">   </span>NGINX<span class="w"> </span>Prometheus<span class="w"> </span>Exporter<span class="w"> </span><span class="k">for</span><span class="w"> </span>NGINX<span class="w"> </span>and<span class="w"> </span>NGIN…<span class="w">   </span><span class="m">43</span>
+nginx/unit<span class="w">                        </span>This<span class="w"> </span>repository<span class="w"> </span>is<span class="w"> </span>retired,<span class="w"> </span>use<span class="w"> </span>the<span class="w"> </span>Docker<span class="w"> </span>o…<span class="w">   </span><span class="m">63</span>
+nginx/unit-preview<span class="w">                </span>Unit<span class="w"> </span>preview<span class="w"> </span>features<span class="w">                           </span><span class="m">0</span>
+bitnami/nginx<span class="w">                     </span>Bitnami<span class="w"> </span>container<span class="w"> </span>image<span class="w"> </span><span class="k">for</span><span class="w"> </span>NGINX<span class="w">               </span><span class="m">193</span>
+rapidfort/nginx<span class="w">                   </span>RapidFort<span class="w"> </span>optimized,<span class="w"> </span>hardened<span class="w"> </span>image<span class="w"> </span><span class="k">for</span><span class="w"> </span>NGINX<span class="w">   </span><span class="m">15</span>
+kasmweb/nginx<span class="w">                     </span>An<span class="w"> </span>Nginx<span class="w"> </span>image<span class="w"> </span>based<span class="w"> </span>off<span class="w"> </span>nginx:alpine<span class="w"> </span>and<span class="w"> </span><span class="k">in</span>…<span class="w">   </span><span class="m">8</span>
+ubuntu/nginx<span class="w">                      </span>Nginx,<span class="w"> </span>a<span class="w"> </span>high-performance<span class="w"> </span>reverse<span class="w"> </span>proxy<span class="w"> </span><span class="p">&amp;</span><span class="w"> </span>we…<span class="w">   </span><span class="m">116</span>
+chainguard/nginx<span class="w">                  </span>Minimal<span class="w"> </span>Wolfi-based<span class="w"> </span>nginx<span class="w"> </span>HTTP,<span class="w"> </span>reverse<span class="w"> </span>prox…<span class="w">   </span><span class="m">2</span>
+dockette/nginx<span class="w">                    </span>Nginx<span class="w"> </span>SSL<span class="w"> </span>/<span class="w"> </span>HSTS<span class="w"> </span>/<span class="w"> </span>HTTP2<span class="w">                        </span><span class="m">3</span>
+jitesoft/nginx<span class="w">                    </span>Nginx<span class="w"> </span>on<span class="w"> </span>alpine<span class="w"> </span>linux<span class="w">                           </span><span class="m">0</span>
+docksal/nginx<span class="w">                     </span>Nginx<span class="w"> </span>service<span class="w"> </span>image<span class="w"> </span><span class="k">for</span><span class="w"> </span>Docksal<span class="w">                 </span><span class="m">0</span>
+gluufederation/nginx<span class="w">               </span>A<span class="w"> </span>customized<span class="w"> </span>NGINX<span class="w"> </span>image<span class="w"> </span>containing<span class="w"> </span>a<span class="w"> </span>consu…<span class="w">   </span><span class="m">1</span>
+okteto/nginx<span class="w">                                                                      </span><span class="m">0</span>
+objectscale/nginx<span class="w">                                                                 </span><span class="m">0</span>
+intel/nginx<span class="w">                                                                       </span><span class="m">0</span>
+circleci/nginx<span class="w">                    </span>This<span class="w"> </span>image<span class="w"> </span>is<span class="w"> </span><span class="k">for</span><span class="w"> </span>internal<span class="w"> </span>use<span class="w">                  </span><span class="m">2</span>
+bitnamicharts/nginx<span class="w">                                                               </span><span class="m">0</span>
+vmware/nginx<span class="w">                                                                      </span><span class="m">2</span>
+rancher/nginx<span class="w">                                                                     </span><span class="m">2</span>
+linuxserver/nginx<span class="w">                 </span>An<span class="w"> </span>Nginx<span class="w"> </span>container,<span class="w"> </span>brought<span class="w"> </span>to<span class="w"> </span>you<span class="w"> </span>by<span class="w"> </span>LinuxS…<span class="w">   </span><span class="m">217</span>
+redash/nginx<span class="w">                      </span>Pre-configured<span class="w"> </span>nginx<span class="w"> </span>to<span class="w"> </span>proxy<span class="w"> </span>linked<span class="w"> </span>contain…<span class="w">   </span><span class="m">2</span>
+</code></pre></div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>The <code>docker search</code> command returns the following image information:</p>
+<ul>
+<li>Repository names</li>
+<li>Image descriptions</li>
+<li>Stars - these measure the popularity of an image</li>
+<li>Official - an image managed by the upstream developer (e.g., the fedora image managed by the Fedora team) </li>
+<li>Automated - an image built by the Docker Hub's Automated Build process</li>
+</ul>
+</div>
+<p>In alternative, you can make a similar search on the Docker Hub Web <a href="https://hub.docker.com/" target="_blank">site</a>:</p>
+<p><img alt="Search nginx image" src="../images/docker_hub_nginx.png" /></p>
+<p>Let's download the official image using the <code>docker image pull</code> command:</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>image<span class="w"> </span>pull<span class="w"> </span>nginx
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>Using<span class="w"> </span>default<span class="w"> </span>tag:<span class="w"> </span>latest
+latest:<span class="w"> </span>Pulling<span class="w"> </span>from<span class="w"> </span>library/nginx
+e4fff0779e6d:<span class="w"> </span>Pull<span class="w"> </span><span class="nb">complete</span>
+2a0cb278fd9f:<span class="w"> </span>Pull<span class="w"> </span><span class="nb">complete</span>
+7045d6c32ae2:<span class="w"> </span>Pull<span class="w"> </span><span class="nb">complete</span>
+03de31afb035:<span class="w"> </span>Pull<span class="w"> </span><span class="nb">complete</span>
+0f17be8dcff2:<span class="w"> </span>Pull<span class="w"> </span><span class="nb">complete</span>
+14b7e5e8f394:<span class="w"> </span>Pull<span class="w"> </span><span class="nb">complete</span>
+23fa5a7b99a6:<span class="w"> </span>Pull<span class="w"> </span><span class="nb">complete</span>
+Digest:<span class="w"> </span>sha256:447a8665cc1dab95b1ca778e162215839ccbb9189104c79d7ec3a81e14577add
+Status:<span class="w"> </span>Downloaded<span class="w"> </span>newer<span class="w"> </span>image<span class="w"> </span><span class="k">for</span><span class="w"> </span>nginx:latest
+docker.io/library/nginx:latest
+</code></pre></div>
+<p>In order to list the images downloaded on your host, you can use the command:</p>
+<p><div class="highlight"><pre><span></span><code>docker<span class="w"> </span>image<span class="w"> </span>ls<span class="w"> </span>
+</code></pre></div>
+The output of this command provides useful information, including the size of the image:</p>
+<div class="highlight"><pre><span></span><code>REPOSITORY<span class="w">    </span>TAG<span class="w">       </span>IMAGE<span class="w"> </span>ID<span class="w">       </span>CREATED<span class="w">         </span>SIZE
+nginx<span class="w">         </span>latest<span class="w">    </span>5ef79149e0ec<span class="w">   </span><span class="m">2</span><span class="w"> </span>weeks<span class="w"> </span>ago<span class="w">     </span>188MB
+ubuntu<span class="w">        </span>latest<span class="w">    </span>edbfe74c41f8<span class="w">   </span><span class="m">4</span><span class="w"> </span>weeks<span class="w"> </span>ago<span class="w">     </span><span class="m">78</span>.1MB
+hello-world<span class="w">   </span>latest<span class="w">    </span>d2c94e258dcb<span class="w">   </span><span class="m">16</span><span class="w"> </span>months<span class="w"> </span>ago<span class="w">   </span><span class="m">13</span>.3kB
+</code></pre></div>
+<p>Let's have a look at the image with the commands we have already seen in the previous section:</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>image<span class="w"> </span>inspect<span class="w"> </span>nginx
+</code></pre></div>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span>
+<span class="normal">73</span>
+<span class="normal">74</span>
+<span class="normal">75</span>
+<span class="normal">76</span>
+<span class="normal">77</span>
+<span class="normal">78</span>
+<span class="normal">79</span>
+<span class="normal">80</span>
+<span class="normal">81</span>
+<span class="normal">82</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="o">[</span>
+<span class="w">    </span><span class="o">{</span>
+<span class="w">        </span><span class="s2">&quot;Id&quot;</span>:<span class="w"> </span><span class="s2">&quot;sha256:5ef79149e0ec84a7a9f9284c3f91aa3c20608f8391f5445eabe92ef07dbda03c&quot;</span>,
+<span class="w">        </span><span class="s2">&quot;RepoTags&quot;</span>:<span class="w"> </span><span class="o">[</span>
+<span class="w">            </span><span class="s2">&quot;nginx:latest&quot;</span>
+<span class="w">        </span><span class="o">]</span>,
+<span class="w">        </span><span class="s2">&quot;RepoDigests&quot;</span>:<span class="w"> </span><span class="o">[</span>
+<span class="w">            </span><span class="s2">&quot;nginx@sha256:447a8665cc1dab95b1ca778e162215839ccbb9189104c79d7ec3a81e14577add&quot;</span>
+<span class="w">        </span><span class="o">]</span>,
+<span class="w">        </span><span class="s2">&quot;Parent&quot;</span>:<span class="w"> </span><span class="s2">&quot;&quot;</span>,
+<span class="w">        </span><span class="s2">&quot;Comment&quot;</span>:<span class="w"> </span><span class="s2">&quot;buildkit.dockerfile.v0&quot;</span>,
+<span class="w">        </span><span class="s2">&quot;Created&quot;</span>:<span class="w"> </span><span class="s2">&quot;2024-08-14T21:31:12Z&quot;</span>,
+<span class="w">        </span><span class="s2">&quot;DockerVersion&quot;</span>:<span class="w"> </span><span class="s2">&quot;&quot;</span>,
+<span class="w">        </span><span class="s2">&quot;Author&quot;</span>:<span class="w"> </span><span class="s2">&quot;&quot;</span>,
+<span class="w">        </span><span class="s2">&quot;Config&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<span class="w">            </span><span class="s2">&quot;Hostname&quot;</span>:<span class="w"> </span><span class="s2">&quot;&quot;</span>,
+<span class="w">            </span><span class="s2">&quot;Domainname&quot;</span>:<span class="w"> </span><span class="s2">&quot;&quot;</span>,
+<span class="w">            </span><span class="s2">&quot;User&quot;</span>:<span class="w"> </span><span class="s2">&quot;&quot;</span>,
+<span class="w">            </span><span class="s2">&quot;AttachStdin&quot;</span>:<span class="w"> </span>false,
+<span class="w">            </span><span class="s2">&quot;AttachStdout&quot;</span>:<span class="w"> </span>false,
+<span class="w">            </span><span class="s2">&quot;AttachStderr&quot;</span>:<span class="w"> </span>false,
+<span class="w">            </span><span class="s2">&quot;ExposedPorts&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<span class="hll"><span class="w">                </span><span class="s2">&quot;80/tcp&quot;</span>:<span class="w"> </span><span class="o">{}</span>
+</span><span class="w">            </span><span class="o">}</span>,
+<span class="w">            </span><span class="s2">&quot;Tty&quot;</span>:<span class="w"> </span>false,
+<span class="w">            </span><span class="s2">&quot;OpenStdin&quot;</span>:<span class="w"> </span>false,
+<span class="w">            </span><span class="s2">&quot;StdinOnce&quot;</span>:<span class="w"> </span>false,
+<span class="w">            </span><span class="s2">&quot;Env&quot;</span>:<span class="w"> </span><span class="o">[</span>
+<span class="w">                </span><span class="s2">&quot;PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin&quot;</span>,
+<span class="hll"><span class="w">                </span><span class="s2">&quot;NGINX_VERSION=1.27.1&quot;</span>,
+</span><span class="w">                </span><span class="s2">&quot;NJS_VERSION=0.8.5&quot;</span>,
+<span class="w">                </span><span class="s2">&quot;NJS_RELEASE=1~bookworm&quot;</span>,
+<span class="w">                </span><span class="s2">&quot;PKG_RELEASE=1~bookworm&quot;</span>,
+<span class="w">                </span><span class="s2">&quot;DYNPKG_RELEASE=2~bookworm&quot;</span>
+<span class="w">            </span><span class="o">]</span>,
+<span class="w">            </span><span class="s2">&quot;Cmd&quot;</span>:<span class="w"> </span><span class="o">[</span>
+<span class="hll"><span class="w">                </span><span class="s2">&quot;nginx&quot;</span>,
+</span><span class="hll"><span class="w">                </span><span class="s2">&quot;-g&quot;</span>,
+</span><span class="hll"><span class="w">                </span><span class="s2">&quot;daemon off;&quot;</span>
+</span><span class="w">            </span><span class="o">]</span>,
+<span class="w">            </span><span class="s2">&quot;ArgsEscaped&quot;</span>:<span class="w"> </span>true,
+<span class="w">            </span><span class="s2">&quot;Image&quot;</span>:<span class="w"> </span><span class="s2">&quot;&quot;</span>,
+<span class="w">            </span><span class="s2">&quot;Volumes&quot;</span>:<span class="w"> </span>null,
+<span class="w">            </span><span class="s2">&quot;WorkingDir&quot;</span>:<span class="w"> </span><span class="s2">&quot;&quot;</span>,
+<span class="w">            </span><span class="s2">&quot;Entrypoint&quot;</span>:<span class="w"> </span><span class="o">[</span>
+<span class="w">                </span><span class="s2">&quot;/docker-entrypoint.sh&quot;</span>
+<span class="w">            </span><span class="o">]</span>,
+<span class="w">            </span><span class="s2">&quot;OnBuild&quot;</span>:<span class="w"> </span>null,
+<span class="w">            </span><span class="s2">&quot;Labels&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<span class="w">                </span><span class="s2">&quot;maintainer&quot;</span>:<span class="w"> </span><span class="s2">&quot;NGINX Docker Maintainers &lt;docker-maint@nginx.com&gt;&quot;</span>
+<span class="w">            </span><span class="o">}</span>,
+<span class="w">            </span><span class="s2">&quot;StopSignal&quot;</span>:<span class="w"> </span><span class="s2">&quot;SIGQUIT&quot;</span>
+<span class="w">        </span><span class="o">}</span>,
+<span class="w">        </span><span class="s2">&quot;Architecture&quot;</span>:<span class="w"> </span><span class="s2">&quot;amd64&quot;</span>,
+<span class="w">        </span><span class="s2">&quot;Os&quot;</span>:<span class="w"> </span><span class="s2">&quot;linux&quot;</span>,
+<span class="w">        </span><span class="s2">&quot;Size&quot;</span>:<span class="w"> </span><span class="m">187694648</span>,
+<span class="w">        </span><span class="s2">&quot;GraphDriver&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<span class="w">            </span><span class="s2">&quot;Data&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<span class="w">                </span><span class="s2">&quot;LowerDir&quot;</span>:<span class="w"> </span><span class="s2">&quot;/var/lib/docker/overlay2/29bfd1646b549c5a2e7488cd2df0cfbf5b31e6e452390a6419590f798a5be2b7/diff:/var/lib/docker/overlay2/b9732ca651e6793c280fe0b6408bbebe59bbbebbdd596b40cfd51f469243892a/diff:/var/lib/docker/overlay2/2e84243b34f95d37bd725e031f33665c8a2ec89d99824bcb96a0694a52dcb7c9/diff:/var/lib/docker/overlay2/4d59513c75c18791768dc9a21232185999d0fa81c65506e950842b46565fb20b/diff:/var/lib/docker/overlay2/4bd3dd2794ec1e9f2729f9252882a1728abbd44a2e417feb55fbd019857d7054/diff:/var/lib/docker/overlay2/9145ec71e543c915530869f33be035a9f64642f304aa39acdd73b64d6d667d48/diff&quot;</span>,
+<span class="w">                </span><span class="s2">&quot;MergedDir&quot;</span>:<span class="w"> </span><span class="s2">&quot;/var/lib/docker/overlay2/670ced786458f0d0102c989a939e8808fdfd0e8c982c70d6173b7d7b36fe9e9d/merged&quot;</span>,
+<span class="w">                </span><span class="s2">&quot;UpperDir&quot;</span>:<span class="w"> </span><span class="s2">&quot;/var/lib/docker/overlay2/670ced786458f0d0102c989a939e8808fdfd0e8c982c70d6173b7d7b36fe9e9d/diff&quot;</span>,
+<span class="w">                </span><span class="s2">&quot;WorkDir&quot;</span>:<span class="w"> </span><span class="s2">&quot;/var/lib/docker/overlay2/670ced786458f0d0102c989a939e8808fdfd0e8c982c70d6173b7d7b36fe9e9d/work&quot;</span>
+<span class="w">            </span><span class="o">}</span>,
+<span class="w">            </span><span class="s2">&quot;Name&quot;</span>:<span class="w"> </span><span class="s2">&quot;overlay2&quot;</span>
+<span class="w">        </span><span class="o">}</span>,
+<span class="w">        </span><span class="s2">&quot;RootFS&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<span class="w">            </span><span class="s2">&quot;Type&quot;</span>:<span class="w"> </span><span class="s2">&quot;layers&quot;</span>,
+<span class="w">            </span><span class="s2">&quot;Layers&quot;</span>:<span class="w"> </span><span class="o">[</span>
+<span class="w">                </span><span class="s2">&quot;sha256:9853575bc4f955c5892dd64187538a6cd02dba6968eba9201854876a7a257034&quot;</span>,
+<span class="w">                </span><span class="s2">&quot;sha256:72db5db515fdd9ae82b759fc207fdfbcc31567c28bb87950abc94ce1d60b2d40&quot;</span>,
+<span class="w">                </span><span class="s2">&quot;sha256:8b87c0c6652495401acfbe029ede84a5f327664770561ba5f8b7fe9149f52dd0&quot;</span>,
+<span class="w">                </span><span class="s2">&quot;sha256:ec1a2ca4ac8784def146544fc7068db06a188d2da4fd7c4e134a76415b8bc1a8&quot;</span>,
+<span class="w">                </span><span class="s2">&quot;sha256:55e54df86207fa772302a6fc1e78eb60bd7e3ebd4f913ef7f5ad668ad69ab64d&quot;</span>,
+<span class="w">                </span><span class="s2">&quot;sha256:f4f00eaedec7933a48b09f3948c685c41d55f0bf5906295dd022c05b65082344&quot;</span>,
+<span class="w">                </span><span class="s2">&quot;sha256:5f0272c6e96d5cd8ea1c6507cfce81980d4b99322bd037d99250a79d4c0b9f1a&quot;</span>
+<span class="w">            </span><span class="o">]</span>
+<span class="w">        </span><span class="o">}</span>,
+<span class="w">        </span><span class="s2">&quot;Metadata&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<span class="w">            </span><span class="s2">&quot;LastTagTime&quot;</span>:<span class="w"> </span><span class="s2">&quot;0001-01-01T00:00:00Z&quot;</span>
+<span class="w">        </span><span class="o">}</span>
+<span class="w">    </span><span class="o">}</span>
+<span class="o">]</span>
+</code></pre></div></td></tr></table></div>
+<p>We can see that the nginx version in our container will be <code>1.27.1</code>, the service will be listening on port <code>80</code> and the command that will be executed at the container start is <code>nginx -g daemon off;</code>.</p>
+<p>This is a useful exercise, but in general you will find these information in the <a href="https://hub.docker.com/_/nginx?tab=description&amp;page=1&amp;ordering=last_updated" target="_blank">description</a> of the image on Docker hub.</p>
+<h3 id="creating-a-daemonized-container">Creating a daemonized container<a class="headerlink" href="#creating-a-daemonized-container" title="Permanent link">&para;</a></h3>
+<p>In addition to the interactive containers, we can create <em>longer-running</em> containers. </p>
+<p>Daemonized containers don't have the interactive session we've used in our previous example and are ideal for running applications and services. 
+Most of the containers you're likely to run will probably be daemonized. </p>
+<p>Let's start a daemonized container now.</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>container<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>--name<span class="w"> </span>nginx<span class="w"> </span>nginx
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code>-d</code> flag tells Docker to detach the container to the background.
+The <code>--name</code> option allows to set a name for your container</p>
+</div>
+<p>Instead of being attached to a shell, the <code>docker run</code> command has instead returned a container ID and returned us to our command prompt. </p>
+<p>We can see our container running with:</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>container<span class="w"> </span>ps
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>container<span class="w"> </span>ps
+CONTAINER<span class="w"> </span>ID<span class="w">   </span>IMAGE<span class="w">     </span>COMMAND<span class="w">                  </span>CREATED<span class="w">          </span>STATUS<span class="w">          </span>PORTS<span class="w">     </span>NAMES
+43147119c02a<span class="w">   </span>nginx<span class="w">     </span><span class="s2">&quot;/docker-entrypoint.…&quot;</span><span class="w">   </span><span class="m">20</span><span class="w"> </span>seconds<span class="w"> </span>ago<span class="w">   </span>Up<span class="w"> </span><span class="m">12</span><span class="w"> </span>seconds<span class="w">   </span><span class="m">80</span>/tcp<span class="w">    </span>nginx
+</code></pre></div>
+<h3 id="getting-the-container-log">Getting the container log<a class="headerlink" href="#getting-the-container-log" title="Permanent link">&para;</a></h3>
+<p>What's happening inside our container?
+We can use the <code>docker container logs</code> command to fetch the log of a container:</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>container<span class="w"> </span>logs<span class="w"> </span>nginx
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>/docker-entrypoint.sh:<span class="w"> </span>/docker-entrypoint.d/<span class="w"> </span>is<span class="w"> </span>not<span class="w"> </span>empty,<span class="w"> </span>will<span class="w"> </span>attempt<span class="w"> </span>to<span class="w"> </span>perform<span class="w"> </span>configuration
+/docker-entrypoint.sh:<span class="w"> </span>Looking<span class="w"> </span><span class="k">for</span><span class="w"> </span>shell<span class="w"> </span>scripts<span class="w"> </span><span class="k">in</span><span class="w"> </span>/docker-entrypoint.d/
+/docker-entrypoint.sh:<span class="w"> </span>Launching<span class="w"> </span>/docker-entrypoint.d/10-listen-on-ipv6-by-default.sh
+<span class="m">10</span>-listen-on-ipv6-by-default.sh:<span class="w"> </span>info:<span class="w"> </span>Getting<span class="w"> </span>the<span class="w"> </span>checksum<span class="w"> </span>of<span class="w"> </span>/etc/nginx/conf.d/default.conf
+<span class="m">10</span>-listen-on-ipv6-by-default.sh:<span class="w"> </span>info:<span class="w"> </span>Enabled<span class="w"> </span>listen<span class="w"> </span>on<span class="w"> </span>IPv6<span class="w"> </span><span class="k">in</span><span class="w"> </span>/etc/nginx/conf.d/default.conf
+/docker-entrypoint.sh:<span class="w"> </span>Sourcing<span class="w"> </span>/docker-entrypoint.d/15-local-resolvers.envsh
+/docker-entrypoint.sh:<span class="w"> </span>Launching<span class="w"> </span>/docker-entrypoint.d/20-envsubst-on-templates.sh
+/docker-entrypoint.sh:<span class="w"> </span>Launching<span class="w"> </span>/docker-entrypoint.d/30-tune-worker-processes.sh
+/docker-entrypoint.sh:<span class="w"> </span>Configuration<span class="w"> </span>complete<span class="p">;</span><span class="w"> </span>ready<span class="w"> </span><span class="k">for</span><span class="w"> </span>start<span class="w"> </span>up
+<span class="m">2024</span>/09/04<span class="w"> </span><span class="m">14</span>:09:50<span class="w"> </span><span class="o">[</span>notice<span class="o">]</span><span class="w"> </span><span class="m">1</span><span class="c1">#1: using the &quot;epoll&quot; event method</span>
+<span class="m">2024</span>/09/04<span class="w"> </span><span class="m">14</span>:09:50<span class="w"> </span><span class="o">[</span>notice<span class="o">]</span><span class="w"> </span><span class="m">1</span><span class="c1">#1: nginx/1.27.1</span>
+<span class="m">2024</span>/09/04<span class="w"> </span><span class="m">14</span>:09:50<span class="w"> </span><span class="o">[</span>notice<span class="o">]</span><span class="w"> </span><span class="m">1</span><span class="c1">#1: built by gcc 12.2.0 (Debian 12.2.0-14)</span>
+<span class="m">2024</span>/09/04<span class="w"> </span><span class="m">14</span>:09:50<span class="w"> </span><span class="o">[</span>notice<span class="o">]</span><span class="w"> </span><span class="m">1</span><span class="c1">#1: OS: Linux 6.8.0-40-generic</span>
+<span class="m">2024</span>/09/04<span class="w"> </span><span class="m">14</span>:09:50<span class="w"> </span><span class="o">[</span>notice<span class="o">]</span><span class="w"> </span><span class="m">1</span><span class="c1">#1: getrlimit(RLIMIT_NOFILE): 1048576:1048576</span>
+<span class="m">2024</span>/09/04<span class="w"> </span><span class="m">14</span>:09:50<span class="w"> </span><span class="o">[</span>notice<span class="o">]</span><span class="w"> </span><span class="m">1</span><span class="c1">#1: start worker processes</span>
+<span class="m">2024</span>/09/04<span class="w"> </span><span class="m">14</span>:09:50<span class="w"> </span><span class="o">[</span>notice<span class="o">]</span><span class="w"> </span><span class="m">1</span><span class="c1">#1: start worker process 29</span>
+<span class="m">2024</span>/09/04<span class="w"> </span><span class="m">14</span>:09:50<span class="w"> </span><span class="o">[</span>notice<span class="o">]</span><span class="w"> </span><span class="m">1</span><span class="c1">#1: start worker process 30</span>
+</code></pre></div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>We can also monitor the container's logs much like the <code>tail -f</code> binary operates using the <code>-f</code> flag.
+You can also tail a portion of the logs of a container by using the <code>--tail</code> option.
+Moreover you can also use the <code>-t</code> flag to prefix the log entries with timestamps.</p>
+</div>
+<h3 id="inspecting-the-container-processes">Inspecting the container processes<a class="headerlink" href="#inspecting-the-container-processes" title="Permanent link">&para;</a></h3>
+<p>We can inspect the processes running inside our container using the <code>docker container top</code> command:</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>container<span class="w"> </span>top<span class="w"> </span>nginx
+UID<span class="w">                 </span>PID<span class="w">                 </span>PPID<span class="w">                </span>C<span class="w">                   </span>STIME<span class="w">               </span>TTY<span class="w">                 </span>TIME<span class="w">                </span>CMD
+root<span class="w">                </span><span class="m">49252</span><span class="w">               </span><span class="m">49232</span><span class="w">               </span><span class="m">0</span><span class="w">                   </span><span class="m">14</span>:09<span class="w">               </span>?<span class="w">                   </span><span class="m">00</span>:00:00<span class="w">            </span>nginx:<span class="w"> </span>master<span class="w"> </span>process<span class="w"> </span>nginx<span class="w"> </span>-g<span class="w"> </span>daemon<span class="w"> </span>off<span class="p">;</span>
+message+<span class="w">            </span><span class="m">49301</span><span class="w">               </span><span class="m">49252</span><span class="w">               </span><span class="m">0</span><span class="w">                   </span><span class="m">14</span>:09<span class="w">               </span>?<span class="w">                   </span><span class="m">00</span>:00:00<span class="w">            </span>nginx:<span class="w"> </span>worker<span class="w"> </span>process
+message+<span class="w">            </span><span class="m">49302</span><span class="w">               </span><span class="m">49252</span><span class="w">               </span><span class="m">0</span><span class="w">                   </span><span class="m">14</span>:09<span class="w">               </span>?<span class="w">                   </span><span class="m">00</span>:00:00<span class="w">            </span>nginx:<span class="w"> </span>worker<span class="w"> </span>process
+</code></pre></div>
+<h3 id="finding-out-more-about-our-container">Finding out more about our container<a class="headerlink" href="#finding-out-more-about-our-container" title="Permanent link">&para;</a></h3>
+<p>Let's use again the command <code>docker container inspect</code> to get more information about our container:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">command</label><label for="__tabbed_1_2">Output</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>container<span class="w"> </span>inspect<span class="w"> </span>nginx
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="o">[</span>
+<span class="w">    </span><span class="o">{</span>
+<span class="w">        </span><span class="s2">&quot;Id&quot;</span>:<span class="w"> </span><span class="s2">&quot;43147119c02a544cffcc2e99a2bd634b6fcec63406e4d9ac510821f5cf140e60&quot;</span>,
+<span class="w">        </span><span class="s2">&quot;Created&quot;</span>:<span class="w"> </span><span class="s2">&quot;2024-09-04T14:09:42.284257833Z&quot;</span>,
+<span class="w">        </span><span class="s2">&quot;Path&quot;</span>:<span class="w"> </span><span class="s2">&quot;/docker-entrypoint.sh&quot;</span>,
+<span class="w">        </span><span class="s2">&quot;Args&quot;</span>:<span class="w"> </span><span class="o">[</span>
+<span class="w">            </span><span class="s2">&quot;nginx&quot;</span>,
+<span class="w">            </span><span class="s2">&quot;-g&quot;</span>,
+<span class="w">            </span><span class="s2">&quot;daemon off;&quot;</span>
+<span class="w">        </span><span class="o">]</span>,
+<span class="w">        </span><span class="s2">&quot;State&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<span class="w">            </span><span class="s2">&quot;Status&quot;</span>:<span class="w"> </span><span class="s2">&quot;running&quot;</span>,
+<span class="w">            </span><span class="s2">&quot;Running&quot;</span>:<span class="w"> </span>true,
+<span class="w">            </span><span class="s2">&quot;Paused&quot;</span>:<span class="w"> </span>false,
+<span class="w">            </span><span class="s2">&quot;Restarting&quot;</span>:<span class="w"> </span>false,
+<span class="w">            </span><span class="s2">&quot;OOMKilled&quot;</span>:<span class="w"> </span>false,
+<span class="w">            </span><span class="s2">&quot;Dead&quot;</span>:<span class="w"> </span>false,
+<span class="w">            </span><span class="s2">&quot;Pid&quot;</span>:<span class="w"> </span><span class="m">49252</span>,
+<span class="w">            </span><span class="s2">&quot;ExitCode&quot;</span>:<span class="w"> </span><span class="m">0</span>,
+<span class="w">            </span><span class="s2">&quot;Error&quot;</span>:<span class="w"> </span><span class="s2">&quot;&quot;</span>,
+<span class="w">            </span><span class="s2">&quot;StartedAt&quot;</span>:<span class="w"> </span><span class="s2">&quot;2024-09-04T14:09:49.261329401Z&quot;</span>,
+<span class="w">            </span><span class="s2">&quot;FinishedAt&quot;</span>:<span class="w"> </span><span class="s2">&quot;0001-01-01T00:00:00Z&quot;</span>
+<span class="w">        </span><span class="o">}</span>,
+<span class="w">        </span><span class="s2">&quot;Image&quot;</span>:<span class="w"> </span><span class="s2">&quot;sha256:5ef79149e0ec84a7a9f9284c3f91aa3c20608f8391f5445eabe92ef07dbda03c&quot;</span>,
+<span class="w">        </span><span class="s2">&quot;ResolvConfPath&quot;</span>:<span class="w"> </span><span class="s2">&quot;/var/lib/docker/containers/43147119c02a544cffcc2e99a2bd634b6fcec63406e4d9ac510821f5cf140e60/resolv.conf&quot;</span>,
+<span class="w">        </span><span class="s2">&quot;HostnamePath&quot;</span>:<span class="w"> </span><span class="s2">&quot;/var/lib/docker/containers/43147119c02a544cffcc2e99a2bd634b6fcec63406e4d9ac510821f5cf140e60/hostname&quot;</span>,
+<span class="w">        </span><span class="s2">&quot;HostsPath&quot;</span>:<span class="w"> </span><span class="s2">&quot;/var/lib/docker/containers/43147119c02a544cffcc2e99a2bd634b6fcec63406e4d9ac510821f5cf140e60/hosts&quot;</span>,
+<span class="w">        </span><span class="s2">&quot;LogPath&quot;</span>:<span class="w"> </span><span class="s2">&quot;/var/lib/docker/containers/43147119c02a544cffcc2e99a2bd634b6fcec63406e4d9ac510821f5cf140e60/43147119c02a544cffcc2e99a2bd634b6fcec63406e4d9ac510821f5cf140e60-json.log&quot;</span>,
+<span class="w">        </span><span class="s2">&quot;Name&quot;</span>:<span class="w"> </span><span class="s2">&quot;/nginx&quot;</span>,
+<span class="w">        </span><span class="s2">&quot;RestartCount&quot;</span>:<span class="w"> </span><span class="m">0</span>,
+<span class="w">        </span><span class="s2">&quot;Driver&quot;</span>:<span class="w"> </span><span class="s2">&quot;overlay2&quot;</span>,
+<span class="w">        </span><span class="s2">&quot;Platform&quot;</span>:<span class="w"> </span><span class="s2">&quot;linux&quot;</span>,
+<span class="w">        </span><span class="s2">&quot;MountLabel&quot;</span>:<span class="w"> </span><span class="s2">&quot;&quot;</span>,
+<span class="w">        </span><span class="s2">&quot;ProcessLabel&quot;</span>:<span class="w"> </span><span class="s2">&quot;&quot;</span>,
+<span class="w">        </span><span class="s2">&quot;AppArmorProfile&quot;</span>:<span class="w"> </span><span class="s2">&quot;docker-default&quot;</span>,
+<span class="w">        </span><span class="s2">&quot;ExecIDs&quot;</span>:<span class="w"> </span>null,
+<span class="w">        </span><span class="s2">&quot;HostConfig&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<span class="w">            </span><span class="s2">&quot;Binds&quot;</span>:<span class="w"> </span>null,
+<span class="w">            </span><span class="s2">&quot;ContainerIDFile&quot;</span>:<span class="w"> </span><span class="s2">&quot;&quot;</span>,
+<span class="w">            </span><span class="s2">&quot;LogConfig&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<span class="w">                </span><span class="s2">&quot;Type&quot;</span>:<span class="w"> </span><span class="s2">&quot;json-file&quot;</span>,
+<span class="w">                </span><span class="s2">&quot;Config&quot;</span>:<span class="w"> </span><span class="o">{}</span>
+<span class="w">            </span><span class="o">}</span>,
+<span class="w">            </span><span class="s2">&quot;NetworkMode&quot;</span>:<span class="w"> </span><span class="s2">&quot;bridge&quot;</span>,
+<span class="w">            </span><span class="s2">&quot;PortBindings&quot;</span>:<span class="w"> </span><span class="o">{}</span>,
+<span class="w">            </span><span class="s2">&quot;RestartPolicy&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<span class="w">                </span><span class="s2">&quot;Name&quot;</span>:<span class="w"> </span><span class="s2">&quot;no&quot;</span>,
+<span class="w">                </span><span class="s2">&quot;MaximumRetryCount&quot;</span>:<span class="w"> </span><span class="m">0</span>
+<span class="w">            </span><span class="o">}</span>,
+<span class="w">            </span><span class="s2">&quot;AutoRemove&quot;</span>:<span class="w"> </span>false,
+<span class="w">            </span><span class="s2">&quot;VolumeDriver&quot;</span>:<span class="w"> </span><span class="s2">&quot;&quot;</span>,
+<span class="w">            </span><span class="s2">&quot;VolumesFrom&quot;</span>:<span class="w"> </span>null,
+<span class="w">            </span><span class="s2">&quot;ConsoleSize&quot;</span>:<span class="w"> </span><span class="o">[</span>
+<span class="w">                </span><span class="m">39</span>,
+<span class="w">                </span><span class="m">178</span>
+<span class="w">            </span><span class="o">]</span>,
+<span class="w">            </span><span class="s2">&quot;CapAdd&quot;</span>:<span class="w"> </span>null,
+<span class="w">            </span><span class="s2">&quot;CapDrop&quot;</span>:<span class="w"> </span>null,
+<span class="w">            </span><span class="s2">&quot;CgroupnsMode&quot;</span>:<span class="w"> </span><span class="s2">&quot;private&quot;</span>,
+<span class="w">            </span><span class="s2">&quot;Dns&quot;</span>:<span class="w"> </span><span class="o">[]</span>,
+<span class="w">            </span><span class="s2">&quot;DnsOptions&quot;</span>:<span class="w"> </span><span class="o">[]</span>,
+<span class="w">            </span><span class="s2">&quot;DnsSearch&quot;</span>:<span class="w"> </span><span class="o">[]</span>,
+<span class="w">            </span><span class="s2">&quot;ExtraHosts&quot;</span>:<span class="w"> </span>null,
+<span class="w">            </span><span class="s2">&quot;GroupAdd&quot;</span>:<span class="w"> </span>null,
+<span class="w">            </span><span class="s2">&quot;IpcMode&quot;</span>:<span class="w"> </span><span class="s2">&quot;private&quot;</span>,
+<span class="w">            </span><span class="s2">&quot;Cgroup&quot;</span>:<span class="w"> </span><span class="s2">&quot;&quot;</span>,
+<span class="w">            </span><span class="s2">&quot;Links&quot;</span>:<span class="w"> </span>null,
+<span class="w">            </span><span class="s2">&quot;OomScoreAdj&quot;</span>:<span class="w"> </span><span class="m">0</span>,
+<span class="w">            </span><span class="s2">&quot;PidMode&quot;</span>:<span class="w"> </span><span class="s2">&quot;&quot;</span>,
+<span class="w">            </span><span class="s2">&quot;Privileged&quot;</span>:<span class="w"> </span>false,
+<span class="w">            </span><span class="s2">&quot;PublishAllPorts&quot;</span>:<span class="w"> </span>false,
+<span class="w">            </span><span class="s2">&quot;ReadonlyRootfs&quot;</span>:<span class="w"> </span>false,
+<span class="w">            </span><span class="s2">&quot;SecurityOpt&quot;</span>:<span class="w"> </span>null,
+<span class="w">            </span><span class="s2">&quot;UTSMode&quot;</span>:<span class="w"> </span><span class="s2">&quot;&quot;</span>,
+<span class="w">            </span><span class="s2">&quot;UsernsMode&quot;</span>:<span class="w"> </span><span class="s2">&quot;&quot;</span>,
+<span class="w">            </span><span class="s2">&quot;ShmSize&quot;</span>:<span class="w"> </span><span class="m">67108864</span>,
+<span class="w">            </span><span class="s2">&quot;Runtime&quot;</span>:<span class="w"> </span><span class="s2">&quot;runc&quot;</span>,
+<span class="w">            </span><span class="s2">&quot;Isolation&quot;</span>:<span class="w"> </span><span class="s2">&quot;&quot;</span>,
+<span class="w">            </span><span class="s2">&quot;CpuShares&quot;</span>:<span class="w"> </span><span class="m">0</span>,
+<span class="w">            </span><span class="s2">&quot;Memory&quot;</span>:<span class="w"> </span><span class="m">0</span>,
+<span class="w">            </span><span class="s2">&quot;NanoCpus&quot;</span>:<span class="w"> </span><span class="m">0</span>,
+<span class="w">            </span><span class="s2">&quot;CgroupParent&quot;</span>:<span class="w"> </span><span class="s2">&quot;&quot;</span>,
+<span class="w">            </span><span class="s2">&quot;BlkioWeight&quot;</span>:<span class="w"> </span><span class="m">0</span>,
+<span class="w">            </span><span class="s2">&quot;BlkioWeightDevice&quot;</span>:<span class="w"> </span><span class="o">[]</span>,
+<span class="w">            </span><span class="s2">&quot;BlkioDeviceReadBps&quot;</span>:<span class="w"> </span><span class="o">[]</span>,
+<span class="w">            </span><span class="s2">&quot;BlkioDeviceWriteBps&quot;</span>:<span class="w"> </span><span class="o">[]</span>,
+<span class="w">            </span><span class="s2">&quot;BlkioDeviceReadIOps&quot;</span>:<span class="w"> </span><span class="o">[]</span>,
+<span class="w">            </span><span class="s2">&quot;BlkioDeviceWriteIOps&quot;</span>:<span class="w"> </span><span class="o">[]</span>,
+<span class="w">            </span><span class="s2">&quot;CpuPeriod&quot;</span>:<span class="w"> </span><span class="m">0</span>,
+<span class="w">            </span><span class="s2">&quot;CpuQuota&quot;</span>:<span class="w"> </span><span class="m">0</span>,
+<span class="w">            </span><span class="s2">&quot;CpuRealtimePeriod&quot;</span>:<span class="w"> </span><span class="m">0</span>,
+<span class="w">            </span><span class="s2">&quot;CpuRealtimeRuntime&quot;</span>:<span class="w"> </span><span class="m">0</span>,
+<span class="w">            </span><span class="s2">&quot;CpusetCpus&quot;</span>:<span class="w"> </span><span class="s2">&quot;&quot;</span>,
+<span class="w">            </span><span class="s2">&quot;CpusetMems&quot;</span>:<span class="w"> </span><span class="s2">&quot;&quot;</span>,
+<span class="w">            </span><span class="s2">&quot;Devices&quot;</span>:<span class="w"> </span><span class="o">[]</span>,
+<span class="w">            </span><span class="s2">&quot;DeviceCgroupRules&quot;</span>:<span class="w"> </span>null,
+<span class="w">            </span><span class="s2">&quot;DeviceRequests&quot;</span>:<span class="w"> </span>null,
+<span class="w">            </span><span class="s2">&quot;MemoryReservation&quot;</span>:<span class="w"> </span><span class="m">0</span>,
+<span class="w">            </span><span class="s2">&quot;MemorySwap&quot;</span>:<span class="w"> </span><span class="m">0</span>,
+<span class="w">            </span><span class="s2">&quot;MemorySwappiness&quot;</span>:<span class="w"> </span>null,
+<span class="w">            </span><span class="s2">&quot;OomKillDisable&quot;</span>:<span class="w"> </span>null,
+<span class="w">            </span><span class="s2">&quot;PidsLimit&quot;</span>:<span class="w"> </span>null,
+<span class="w">            </span><span class="s2">&quot;Ulimits&quot;</span>:<span class="w"> </span><span class="o">[]</span>,
+<span class="w">            </span><span class="s2">&quot;CpuCount&quot;</span>:<span class="w"> </span><span class="m">0</span>,
+<span class="w">            </span><span class="s2">&quot;CpuPercent&quot;</span>:<span class="w"> </span><span class="m">0</span>,
+<span class="w">            </span><span class="s2">&quot;IOMaximumIOps&quot;</span>:<span class="w"> </span><span class="m">0</span>,
+<span class="w">            </span><span class="s2">&quot;IOMaximumBandwidth&quot;</span>:<span class="w"> </span><span class="m">0</span>,
+<span class="w">            </span><span class="s2">&quot;MaskedPaths&quot;</span>:<span class="w"> </span><span class="o">[</span>
+<span class="w">                </span><span class="s2">&quot;/proc/asound&quot;</span>,
+<span class="w">                </span><span class="s2">&quot;/proc/acpi&quot;</span>,
+<span class="w">                </span><span class="s2">&quot;/proc/kcore&quot;</span>,
+<span class="w">                </span><span class="s2">&quot;/proc/keys&quot;</span>,
+<span class="w">                </span><span class="s2">&quot;/proc/latency_stats&quot;</span>,
+<span class="w">                </span><span class="s2">&quot;/proc/timer_list&quot;</span>,
+<span class="w">                </span><span class="s2">&quot;/proc/timer_stats&quot;</span>,
+<span class="w">                </span><span class="s2">&quot;/proc/sched_debug&quot;</span>,
+<span class="w">                </span><span class="s2">&quot;/proc/scsi&quot;</span>,
+<span class="w">                </span><span class="s2">&quot;/sys/firmware&quot;</span>,
+<span class="w">                </span><span class="s2">&quot;/sys/devices/virtual/powercap&quot;</span>
+<span class="w">            </span><span class="o">]</span>,
+<span class="w">            </span><span class="s2">&quot;ReadonlyPaths&quot;</span>:<span class="w"> </span><span class="o">[</span>
+<span class="w">                </span><span class="s2">&quot;/proc/bus&quot;</span>,
+<span class="w">                </span><span class="s2">&quot;/proc/fs&quot;</span>,
+<span class="w">                </span><span class="s2">&quot;/proc/irq&quot;</span>,
+<span class="w">                </span><span class="s2">&quot;/proc/sys&quot;</span>,
+<span class="w">                </span><span class="s2">&quot;/proc/sysrq-trigger&quot;</span>
+<span class="w">            </span><span class="o">]</span>
+<span class="w">        </span><span class="o">}</span>,
+<span class="w">        </span><span class="s2">&quot;GraphDriver&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<span class="w">            </span><span class="s2">&quot;Data&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<span class="w">                </span><span class="s2">&quot;LowerDir&quot;</span>:<span class="w"> </span><span class="s2">&quot;/var/lib/docker/overlay2/2439f7d82ca5c505d4b56fde68aa78ba7caf71b3ca2cf1598dddff528566a964-init/diff:/var/lib/docker/overlay2/670ced786458f0d0102c989a939e8808fdfd0e8c982c70d6173b7d7b36fe9e9d/diff:/var/lib/docker/overlay2/29bfd1646b549c5a2e7488cd2df0cfbf5b31e6e452390a6419590f798a5be2b7/diff:/var/lib/docker/overlay2/b9732ca651e6793c280fe0b6408bbebe59bbbebbdd596b40cfd51f469243892a/diff:/var/lib/docker/overlay2/2e84243b34f95d37bd725e031f33665c8a2ec89d99824bcb96a0694a52dcb7c9/diff:/var/lib/docker/overlay2/4d59513c75c18791768dc9a21232185999d0fa81c65506e950842b46565fb20b/diff:/var/lib/docker/overlay2/4bd3dd2794ec1e9f2729f9252882a1728abbd44a2e417feb55fbd019857d7054/diff:/var/lib/docker/overlay2/9145ec71e543c915530869f33be035a9f64642f304aa39acdd73b64d6d667d48/diff&quot;</span>,
+<span class="w">                </span><span class="s2">&quot;MergedDir&quot;</span>:<span class="w"> </span><span class="s2">&quot;/var/lib/docker/overlay2/2439f7d82ca5c505d4b56fde68aa78ba7caf71b3ca2cf1598dddff528566a964/merged&quot;</span>,
+<span class="w">                </span><span class="s2">&quot;UpperDir&quot;</span>:<span class="w"> </span><span class="s2">&quot;/var/lib/docker/overlay2/2439f7d82ca5c505d4b56fde68aa78ba7caf71b3ca2cf1598dddff528566a964/diff&quot;</span>,
+<span class="w">                </span><span class="s2">&quot;WorkDir&quot;</span>:<span class="w"> </span><span class="s2">&quot;/var/lib/docker/overlay2/2439f7d82ca5c505d4b56fde68aa78ba7caf71b3ca2cf1598dddff528566a964/work&quot;</span>
+<span class="w">            </span><span class="o">}</span>,
+<span class="w">            </span><span class="s2">&quot;Name&quot;</span>:<span class="w"> </span><span class="s2">&quot;overlay2&quot;</span>
+<span class="w">        </span><span class="o">}</span>,
+<span class="w">        </span><span class="s2">&quot;Mounts&quot;</span>:<span class="w"> </span><span class="o">[]</span>,
+<span class="w">        </span><span class="s2">&quot;Config&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<span class="w">            </span><span class="s2">&quot;Hostname&quot;</span>:<span class="w"> </span><span class="s2">&quot;43147119c02a&quot;</span>,
+<span class="w">            </span><span class="s2">&quot;Domainname&quot;</span>:<span class="w"> </span><span class="s2">&quot;&quot;</span>,
+<span class="w">            </span><span class="s2">&quot;User&quot;</span>:<span class="w"> </span><span class="s2">&quot;&quot;</span>,
+<span class="w">            </span><span class="s2">&quot;AttachStdin&quot;</span>:<span class="w"> </span>false,
+<span class="w">            </span><span class="s2">&quot;AttachStdout&quot;</span>:<span class="w"> </span>false,
+<span class="w">            </span><span class="s2">&quot;AttachStderr&quot;</span>:<span class="w"> </span>false,
+<span class="w">            </span><span class="s2">&quot;ExposedPorts&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<span class="w">                </span><span class="s2">&quot;80/tcp&quot;</span>:<span class="w"> </span><span class="o">{}</span>
+<span class="w">            </span><span class="o">}</span>,
+<span class="w">            </span><span class="s2">&quot;Tty&quot;</span>:<span class="w"> </span>false,
+<span class="w">            </span><span class="s2">&quot;OpenStdin&quot;</span>:<span class="w"> </span>false,
+<span class="w">            </span><span class="s2">&quot;StdinOnce&quot;</span>:<span class="w"> </span>false,
+<span class="w">            </span><span class="s2">&quot;Env&quot;</span>:<span class="w"> </span><span class="o">[</span>
+<span class="w">                </span><span class="s2">&quot;PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin&quot;</span>,
+<span class="w">                </span><span class="s2">&quot;NGINX_VERSION=1.27.1&quot;</span>,
+<span class="w">                </span><span class="s2">&quot;NJS_VERSION=0.8.5&quot;</span>,
+<span class="w">                </span><span class="s2">&quot;NJS_RELEASE=1~bookworm&quot;</span>,
+<span class="w">                </span><span class="s2">&quot;PKG_RELEASE=1~bookworm&quot;</span>,
+<span class="w">                </span><span class="s2">&quot;DYNPKG_RELEASE=2~bookworm&quot;</span>
+<span class="w">            </span><span class="o">]</span>,
+<span class="w">            </span><span class="s2">&quot;Cmd&quot;</span>:<span class="w"> </span><span class="o">[</span>
+<span class="w">                </span><span class="s2">&quot;nginx&quot;</span>,
+<span class="w">                </span><span class="s2">&quot;-g&quot;</span>,
+<span class="w">                </span><span class="s2">&quot;daemon off;&quot;</span>
+<span class="w">            </span><span class="o">]</span>,
+<span class="w">            </span><span class="s2">&quot;Image&quot;</span>:<span class="w"> </span><span class="s2">&quot;nginx&quot;</span>,
+<span class="w">            </span><span class="s2">&quot;Volumes&quot;</span>:<span class="w"> </span>null,
+<span class="w">            </span><span class="s2">&quot;WorkingDir&quot;</span>:<span class="w"> </span><span class="s2">&quot;&quot;</span>,
+<span class="w">            </span><span class="s2">&quot;Entrypoint&quot;</span>:<span class="w"> </span><span class="o">[</span>
+<span class="w">                </span><span class="s2">&quot;/docker-entrypoint.sh&quot;</span>
+<span class="w">            </span><span class="o">]</span>,
+<span class="w">            </span><span class="s2">&quot;OnBuild&quot;</span>:<span class="w"> </span>null,
+<span class="w">            </span><span class="s2">&quot;Labels&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<span class="w">                </span><span class="s2">&quot;maintainer&quot;</span>:<span class="w"> </span><span class="s2">&quot;NGINX Docker Maintainers &lt;docker-maint@nginx.com&gt;&quot;</span>
+<span class="w">            </span><span class="o">}</span>,
+<span class="w">            </span><span class="s2">&quot;StopSignal&quot;</span>:<span class="w"> </span><span class="s2">&quot;SIGQUIT&quot;</span>
+<span class="w">        </span><span class="o">}</span>,
+<span class="w">        </span><span class="s2">&quot;NetworkSettings&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<span class="w">            </span><span class="s2">&quot;Bridge&quot;</span>:<span class="w"> </span><span class="s2">&quot;&quot;</span>,
+<span class="w">            </span><span class="s2">&quot;SandboxID&quot;</span>:<span class="w"> </span><span class="s2">&quot;4c76fb8e97c6aca6858a8476d764d259fbebbb97c38b48f6b65a8bd8413eb165&quot;</span>,
+<span class="w">            </span><span class="s2">&quot;SandboxKey&quot;</span>:<span class="w"> </span><span class="s2">&quot;/var/run/docker/netns/4c76fb8e97c6&quot;</span>,
+<span class="w">            </span><span class="s2">&quot;Ports&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<span class="w">                </span><span class="s2">&quot;80/tcp&quot;</span>:<span class="w"> </span>null
+<span class="w">            </span><span class="o">}</span>,
+<span class="w">            </span><span class="s2">&quot;HairpinMode&quot;</span>:<span class="w"> </span>false,
+<span class="w">            </span><span class="s2">&quot;LinkLocalIPv6Address&quot;</span>:<span class="w"> </span><span class="s2">&quot;&quot;</span>,
+<span class="w">            </span><span class="s2">&quot;LinkLocalIPv6PrefixLen&quot;</span>:<span class="w"> </span><span class="m">0</span>,
+<span class="w">            </span><span class="s2">&quot;SecondaryIPAddresses&quot;</span>:<span class="w"> </span>null,
+<span class="w">            </span><span class="s2">&quot;SecondaryIPv6Addresses&quot;</span>:<span class="w"> </span>null,
+<span class="w">            </span><span class="s2">&quot;EndpointID&quot;</span>:<span class="w"> </span><span class="s2">&quot;cbfee38857162451d749c7772167ac9d01c9fb844b76211aa41c0b239b384472&quot;</span>,
+<span class="w">            </span><span class="s2">&quot;Gateway&quot;</span>:<span class="w"> </span><span class="s2">&quot;172.17.0.1&quot;</span>,
+<span class="w">            </span><span class="s2">&quot;GlobalIPv6Address&quot;</span>:<span class="w"> </span><span class="s2">&quot;&quot;</span>,
+<span class="w">            </span><span class="s2">&quot;GlobalIPv6PrefixLen&quot;</span>:<span class="w"> </span><span class="m">0</span>,
+<span class="w">            </span><span class="s2">&quot;IPAddress&quot;</span>:<span class="w"> </span><span class="s2">&quot;172.17.0.3&quot;</span>,
+<span class="w">            </span><span class="s2">&quot;IPPrefixLen&quot;</span>:<span class="w"> </span><span class="m">16</span>,
+<span class="w">            </span><span class="s2">&quot;IPv6Gateway&quot;</span>:<span class="w"> </span><span class="s2">&quot;&quot;</span>,
+<span class="w">            </span><span class="s2">&quot;MacAddress&quot;</span>:<span class="w"> </span><span class="s2">&quot;02:42:ac:11:00:03&quot;</span>,
+<span class="w">            </span><span class="s2">&quot;Networks&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<span class="w">                </span><span class="s2">&quot;bridge&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<span class="w">                    </span><span class="s2">&quot;IPAMConfig&quot;</span>:<span class="w"> </span>null,
+<span class="w">                    </span><span class="s2">&quot;Links&quot;</span>:<span class="w"> </span>null,
+<span class="w">                    </span><span class="s2">&quot;Aliases&quot;</span>:<span class="w"> </span>null,
+<span class="w">                    </span><span class="s2">&quot;MacAddress&quot;</span>:<span class="w"> </span><span class="s2">&quot;02:42:ac:11:00:03&quot;</span>,
+<span class="w">                    </span><span class="s2">&quot;DriverOpts&quot;</span>:<span class="w"> </span>null,
+<span class="w">                    </span><span class="s2">&quot;NetworkID&quot;</span>:<span class="w"> </span><span class="s2">&quot;b6fbe659163bbccd7ffdace6cfe009584c698941994079fe9f9b3a34d360839c&quot;</span>,
+<span class="w">                    </span><span class="s2">&quot;EndpointID&quot;</span>:<span class="w"> </span><span class="s2">&quot;cbfee38857162451d749c7772167ac9d01c9fb844b76211aa41c0b239b384472&quot;</span>,
+<span class="w">                    </span><span class="s2">&quot;Gateway&quot;</span>:<span class="w"> </span><span class="s2">&quot;172.17.0.1&quot;</span>,
+<span class="w">                    </span><span class="s2">&quot;IPAddress&quot;</span>:<span class="w"> </span><span class="s2">&quot;172.17.0.3&quot;</span>,
+<span class="w">                    </span><span class="s2">&quot;IPPrefixLen&quot;</span>:<span class="w"> </span><span class="m">16</span>,
+<span class="w">                    </span><span class="s2">&quot;IPv6Gateway&quot;</span>:<span class="w"> </span><span class="s2">&quot;&quot;</span>,
+<span class="w">                    </span><span class="s2">&quot;GlobalIPv6Address&quot;</span>:<span class="w"> </span><span class="s2">&quot;&quot;</span>,
+<span class="w">                    </span><span class="s2">&quot;GlobalIPv6PrefixLen&quot;</span>:<span class="w"> </span><span class="m">0</span>,
+<span class="w">                    </span><span class="s2">&quot;DNSNames&quot;</span>:<span class="w"> </span>null
+<span class="w">                </span><span class="o">}</span>
+<span class="w">            </span><span class="o">}</span>
+<span class="w">        </span><span class="o">}</span>
+<span class="w">    </span><span class="o">}</span>
+<span class="o">]</span>
+</code></pre></div>
+</div>
+</div>
+</div>
+<p>We can also selectively query the inspect results hash using the <code>-f</code> or <code>--format</code> flag.</p>
+<p>For example, let's retrieve the container network address:</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>container<span class="w"> </span>inspect<span class="w"> </span>-f<span class="w"> </span><span class="s1">&#39;{{.NetworkSettings.IPAddress}}&#39;</span><span class="w"> </span>nginx
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>172.17.0.3
+</code></pre></div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2024 INFN
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "toc.integrate", "content.code.copy"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.1e8ae164.min.js"></script>
+      
+    
+  </body>
+</html>
